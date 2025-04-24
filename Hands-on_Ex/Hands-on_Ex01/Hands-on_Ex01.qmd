@@ -20,10 +20,9 @@ pacman::p_load(tidyverse)
 exam_data <- read_csv("data/Exam_data.csv")
 ```
 
-## Plotting a simple bar chart
-
 ```{r}
-ggplot(data = exam_data,
-       aes(x = RACE))+
+#之前要加载好 tidyverse 并且读入了 exam_data
+ggplot(exam_data,
+       aes(x = RACE)) +
   geom_bar()
 ```
