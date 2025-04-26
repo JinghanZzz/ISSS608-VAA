@@ -62,7 +62,7 @@ ggplot(data=exam_data)
 
 -   The data argument defines the dataset to be used for plotting.
 
--    If the dataset is not already a data.frame, it will be converted to one by fortify().
+-   If the dataset is not already a data.frame, it will be converted to one by fortify().
 :::
 
 ## **1.6 Essential Grammatical Elements in ggplot2: [Aesthetic mappings](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)**
