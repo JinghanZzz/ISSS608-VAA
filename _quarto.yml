@@ -5,33 +5,34 @@ website:
   title: "ISSS608-VAA"
   navbar:
     left:
-    - text: "Hands-on Exercise"
-      menu:
-        - text: "Hands-on Exercise 1"
-          href: "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html"
-        - text: "Hands-on Exercise 2"
-          href: "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html"
-    - text: "In-class Exercise"
-      menu:
-        - text: "empty for now"
-    - text: "Take-home Exercise"
-      menu:
-        - text: "Take-home Exercise 1"
+      - text: "Hands-on Exercise"
+        menu:
+          - text: "Hands-on Exercise 1"
+            href: "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html"
+          - text: "Hands-on Exercise 2"
+            href: "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html"
+      - text: "In-class Exercise"
+        menu:
+          - text: "empty for now"
+      - text: "Take-home Exercise"
+        menu:
+          - text: "Take-home Exercise 1"
     right:
-    - href: index.qmd
-      text: Home
-    - about.qmd
+      - href: index.qmd
+        text: Home
+      - about.qmd
 
 
-
+    
 format:
   html:
-    theme: cosmo        # 只保留一个 Quarto 识别的主题
-    css: styles.css     # 剩下的自定义写到 styles.css
+    theme: cosmo
+    css: styles.css
     toc: true
     toc-depth: 2
-    toc-location: left
-    number-sections: true
-    code-tools: true
+    toc-location: right   # ✅目录移到右侧
+    number-sections: false
+    code-tools: false
+
 
 editor: visual
