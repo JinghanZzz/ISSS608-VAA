@@ -4,8 +4,8 @@ author: "Zhang Jinghan"
 date-modified: "last-modified"
 format: html
 execute:
-  eval: true
-  echo: true
+  eval: true  # 是否运行代码(不运行就没有outcome)
+  echo: true  # 是否展示代码
   warning: false
   freeze: true #防止重复render
 ---
