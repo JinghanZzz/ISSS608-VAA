@@ -1,0 +1,321 @@
+---
+title: "Take-Home Exercise 01:    Demographic Structures and Distribution of Singapore in 2024"
+author: "Zhang Jinghan"
+published: "May 4, 2025"
+date-modified: "last-modified"
+format: html
+execute:
+  eval: true  #是否执行
+  echo: true  #是否显示结果
+  warning: false
+  freeze: true #防止重复render
+---
+
+## **Overview**
+
+### Task
+
+A local online media company that publishes daily content on digital platforms is planning to release an article on **demographic structures and distribution of Singapore in 2024**. Assuming the role of the graphical editor of the media company, you are tasked to prepare **at most three data visualisation** for the article.
+
+### Data
+
+To accomplish the task, *Singapore Residents by Planning Area / Subzone, Single Year of Age and Sex, June 2024* dataset shares by [Department of Statistics, Singapore (DOS)](https://www.singstat.gov.sg/) will be used.
+
+### Tool & Packages
+
+This is an R based visual analytic task. Data will be processed by appropriate **tidyverse** family of packages and the data visualisation will be prepared using **ggplot2** and its extensions.
+
+-   **tidyverse：**a family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.
+
+-   **patchwork：**for combining multiple ggplot2 graphs into one figure.
+
+<!-- -->
+
+-   **ggrepel**: an R package provides geoms for ggplot2 to repel overlapping text labels.
+
+-   **ggthemes**: an R package provides some extra themes, geoms, and scales for ‘ggplot2’.
+
+-   **hrbrthemes**: an R package provides typography-centric themes and theme components for ggplot2.
+
+-   **scales**: provides the internal scaling infrastructure used by **ggplot2**
+
+-   **ggdist**: for visualizations of distributions and uncertainty
+
+The following code chunk uses `p_load()` of [**pacman**](https://rpubs.com/akshaypatankar/594834) package to check if tidyverse packages are installed in the computer. If they are, the libraries will be called into R.
+
+```{r}
+#| echo: true
+pacman::p_load(tidyverse, patchwork, ggrepel, ggthemes, hrbrthemes, scales, ggdist,dplyr)
+```
+
+## **Getting Started**
+
+### Import Data
+
+In this exercise, respopagesex2024.csv is used.
+
+The code chunk below `read_csv()` of **readr** package is used to import respopagesex2024*.csv* data file into R and save it as an tibble data frame called `sgresidence`.
+
+```{r}
+#| echo: true
+sgresidence <- read_csv("data/respopagesex2024.csv")
+```
+
+### Data Cleaning and Preparation
+
+Use the code chunk below to view the data structure and summary data.
+
+```{r}
+glimpse(sgresidence)      
+head(sgresidence, 10)    
+str(sgresidence)     
+summary(sgresidence)
+```
+
+::: callout-note
+### Insight from the data structure
+
+The dataset contains **60,424 rows** and **6 variables**, describing Singapore's resident population by planning area, subzone, single year of age, sex, and population count, as of June 2024.
+
+-   `PA` and `SZ` are **character variables** representing planning areas and subzones, respectively.
+
+-   `Age` is a **categorical variables** in character format, indicating demographic groups which will be converted to numeric for analysis.
+
+-   `Sex` is a **categorical variable** with values `"Males"` and `"Females"`, which will be standardized to `"Male"` and `"Female"`.
+
+-   `Pop` is a **numeric variable** representing the number of residents in each demographic segment. The population values range from **0 to 1,180**, with a median of **20**, suggesting that most records represent small population counts at a fine-grained level (e.g., age–sex–subzone).
+
+    Since records with 0 population do not contribute to aggregate demographic statistics or visualizations, we removed all rows where `Pop = 0`. This ensures that all retained records represent meaningful demographic segments, streamlining the analysis and improving the clarity of visual outputs.
+
+-   `Time` is a **characteristically constant variable**, with all values equal to **2024**. Since it contains no variation, it will be removed from the analytical dataset or used solely for reference in visualization annotations.
+:::
+
+**Check missing values**
+
+The outcome of the code shows that there is no missing value in this sgresidence.csv.
+
+```{r}
+colSums(is.na(sgresidence)) 
+```
+
+**Convert `Age` to Numeric Value**
+
+The dataset includes an open-ended age group labeled `"90_and_Over"`, which was recoded as `"90"` for analysis. While this simplification may slightly understate the true average age among the elderly, the affected population comprises only 0.603% of the total and does not significantly distort demographic patterns at an aggregate level.
+
+```{r}
+sgresidence <- sgresidence %>%
+  mutate(age = as.integer(Age))
+```
+
+The outcome says mutating data type leads to NA so check which part lead to this issue
+
+```{r}
+sgresidence %>%
+  filter(is.na(as.integer(Age))) %>%
+  distinct(Age)
+```
+
+Check the proportion of 90 and over age group
+
+```{r}
+sgresidence %>%
+  filter(Age == "90_and_Over") %>%
+  summarise(total_90plus = sum(Pop)) %>%
+  mutate(total_pop = sum(sgresidence$Pop),
+         percent = total_90plus / total_pop * 100)
+```
+
+```{r}
+sgresidence <- sgresidence %>%
+  mutate(
+    Age = ifelse(Age == "90_and_Over", "90", Age),
+    age = as.integer(Age)
+  )
+```
+
+**Standardise Sex**
+
+The `Sex` variable is a categorical field originally recorded as `"Males"` and `"Females"`. For consistency and clarity in analysis and visualization, these values were standardised to `"Male"` and `"Female"` respectively.
+
+```{r}
+sgresidence <- sgresidence %>%
+  mutate(Sex = recode(Sex,
+                      "Males" = "Male",
+                      "Females" = "Female"))
+
+```
+
+**Remove Rows with Pop = 0**
+
+```{r}
+sgresidence <- sgresidence %>%
+  filter(Pop > 0)
+
+```
+
+**Drop Time Col**
+
+Since all the data are in the same time, we drop this column
+
+```{r}
+sgresidence <- sgresidence %>% select(-Time)
+```
+
+## Visualisation 1. Population Pyramid
+
+### Preparing the Dataset for the Population Pyramid
+
+This code prepares the dataset required to create a grouped and mirrored population pyramid:
+
+-   **Grouping by Age Group and Sex**:\
+    The dataset `sgresidence` is grouped by 5-year age intervals and `Sex` using the `cut()` and `group_by()` functions. This step ensures population values are aggregated into standard demographic segments.
+
+-   **Summing the Population**:\
+    For each `age_group` and `Sex` combination, the total population is calculated using `sum(Pop)`. This provides the count of people within each demographic bin.
+
+-   **Computing Percentages and Labels**:\
+    Within each gender group, the proportion of each age group is computed (`percent = Pop / total`). Labels with one decimal point (e.g., `"7.2%"`) are created for display next to bars.
+
+-   **Adjusting Population Values for Males**:\
+    To construct a mirrored population pyramid, population counts for males are multiplied by `-1`. This positions male bars on the left side and female bars on the right.
+
+-   **Preparing Axis Breaks and Annotations**:\
+    Auxiliary variables are computed (`max_y`, `top_age_group`) to help position axis breaks and top annotations like “Male” and “Female”.
+
+```{r}
+# Step 1: Calculate total population
+total_pop <- sum(sgresidence$Pop)
+
+# Step 2: Aggregate and calculate percent based on total population
+pyramid_percent <- sgresidence %>%
+  mutate(age_group = cut(age,
+                         breaks = c(seq(0, 90, by = 5), Inf),
+                         right = FALSE,
+                         labels = c(str_c(seq(0, 85, 5), "-", seq(4, 89, 5)), "90+"))) %>%
+  group_by(age_group, Sex) %>%
+  summarise(Pop = sum(Pop), .groups = "drop") %>%
+  mutate(
+    percent = Pop / total_pop * 100,  # ✅ Percent relative to total population
+    Pop_scaled = if_else(Sex == "Male", -Pop, Pop),
+    label = str_c(sprintf("%.1f", percent), "%")
+  )
+
+```
+
+```{r}
+# Step 3: Annotations
+top_age_group <- pyramid_percent %>%
+  pull(age_group) %>%
+  unique() %>%
+  as.character() %>%
+  tail(1)
+
+max_y <- max(pyramid_percent$Pop)
+
+```
+
+```{r}
+#| eval: False 
+# Step 4: Plotting
+ggplot(pyramid_percent, aes(x = age_group, y = Pop_scaled, fill = Sex)) +
+  geom_col(width = 0.95) +
+  geom_text(aes(label = label,
+                hjust = if_else(Sex == "Male", 1.05, -0.05)),
+            size = 3) +
+  geom_vline(xintercept = c(-150000, -100000, -50000, 50000, 100000, 150000),
+             color = "grey80", linetype = "dashed", linewidth = 0.3) +
+  coord_flip() +
+  scale_y_continuous(
+    breaks = seq(-150000, 150000, by = 50000),
+    labels = function(x) paste0(abs(x) / 1000, "k")
+  ) +
+  scale_fill_manual(values = c("Male" = "#ADD8E6", "Female" = "#F4A6A6")) +
+  annotate("text", x = top_age_group, y = -max_y * 0.9, label = "Male", hjust = 1, size = 4, color = "gray20") +
+  annotate("text", x = top_age_group, y = max_y * 0.9, label = "Female", hjust = 0, size = 4, color = "gray20") +
+  labs(
+    title = "Singapore Residents Population Pyramid (2024)",
+    x = "Age Group",
+    y = "Population"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5, size = 14, margin = margin(b = 10))
+  )
+
+```
+
+### Singapore Residents Population Pyramid (2024)
+
+The Singapore Residents Population Pyramid (2024) plots absolute population on the x‑axis (in thousands, “k”) and 5‑year age groups on the y‑axis, with males (light blue) on the left and females (light red) on the right. Percent labels above each bar show that cohort’s share of the **total** national population.
+
+```{r}
+#| echo: false
+# Step 4: Plotting
+ggplot(pyramid_percent, aes(x = age_group, y = Pop_scaled, fill = Sex)) +
+  geom_col(width = 0.95) +
+  geom_text(aes(label = label,
+                hjust = if_else(Sex == "Male", 1.05, -0.05)),
+            size = 3) +
+  geom_vline(xintercept = c(-150000, -100000, -50000, 50000, 100000, 150000),
+             color = "grey80", linetype = "dashed", linewidth = 0.3) +
+  coord_flip() +
+  scale_y_continuous(
+    breaks = seq(-150000, 150000, by = 50000),
+    labels = function(x) paste0(abs(x) / 1000, "k")
+  ) +
+  scale_fill_manual(values = c("Male" = "#ADD8E6", "Female" = "#F4A6A6")) +
+  annotate("text", x = top_age_group, y = -max_y * 0.9, label = "Male", hjust = 1, size = 4, color = "gray20") +
+  annotate("text", x = top_age_group, y = max_y * 0.9, label = "Female", hjust = 0, size = 4, color = "gray20") +
+  labs(
+    title = "Singapore Residents Population Pyramid (2024)",
+    x = "Age Group",
+    y = "Population"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5, size = 14, margin = margin(b = 10))
+  )
+```
+
+::: callout-note
+### Insights from **Singapore Residents Population Pyramid (2024)**
+
+####  Age‑Structure Insights
+
+| Observation                                                 | Explanation                                                          | Implication                                                                                            |
+|--------------------|--------------------------|--------------------------|
+| **Narrow Base** 0–4 yrs ≈ 2.0–2.1 %, 5–14 yrs ≈ 2.4–2.5 %   | Persistently low fertility; few future labour‑market entrants        | Education demand will shrink; fertility incentives or young‑skilled immigration may be needed          |
+| **Pronounced Middle Bulge** – 30–49 yrs ≈ 3.8–4.0 % each    | Core working‑age cohorts dominate, driving current GDP               | In 10–15 years this group retires; pension & re‑skilling systems must be ready                         |
+| **Moderate Ageing** – 65–74 yrs 2.4–3.2 %, 75–84 yrs \< 2 % | Early‑stage ageing, “beehive” not yet inverted                       | Step‑wise expansion of elder‑care & health services is required                                        |
+| **Rising Dependency Ratio**                                 | Seniors growing faster than children while the working share shrinks | Higher fiscal and social‑security pressure; need to lift labour‑force participation & delay retirement |
+
+####  Sex‑Structure Insights
+
+| Age band      | Male vs Female                                    | Interpretation                                                                     |
+|-----------|-------------------------------|-------------------------------|
+| **0–14 yrs**  | Slight male surplus (normal biological sex ratio) | No evidence of sex‑selective behaviour                                             |
+| **15–64 yrs** | Virtually symmetric bars                          | Gender balance in the labour force fosters economic stability                      |
+| **65 + yrs**  | Female bars exceed male bars, gap widens 75 +     | Higher female life expectancy; ageing policy must address the needs of older women |
+
+#### Key Take‑Aways
+
+-   **Low‑fertility, early‑ageing profile** – The pyramid has a narrow base and moderate top, signalling declining births and a gradual demographic transition toward ageing.
+
+-   **Late‑stage demographic dividend** – The 30–49 bulge still powers the economy but will soon shift into retirement.
+
+-   **Healthy overall sex ratio** – Only the expected female advantage at advanced ages; no structural gender imbalance.
+
+**Policy Priorities**
+
+-   Boost fertility through childcare, housing and family incentives.
+
+-   Extend working lives via lifelong learning, re‑skilling, and flexible retirement.
+
+-   Scale up community healthcare and long‑term‑care capacity, with a focus on elderly women living alone.
+
+-   Selectively attract young, skilled immigrants to stabilise the age pyramid and sustain growth.
+
+The 2024 pyramid shows Singapore moving from the tail‑end of its demographic dividend toward an ageing society. While gender balance remains healthy, policymakers must simultaneously counter low fertility and prepare for rising dependency to secure long‑term social and economic resilience.
+:::
