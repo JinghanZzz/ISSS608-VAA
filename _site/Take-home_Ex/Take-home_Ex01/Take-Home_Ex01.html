@@ -182,7 +182,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><strong>Overview</strong></a></li>
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started"><strong>Getting Started</strong></a></li>
-  <li><a href="#visualisation-1.-population-pyramid" id="toc-visualisation-1.-population-pyramid" class="nav-link" data-scroll-target="#visualisation-1.-population-pyramid">Visualisation 1. Population Pyramid</a></li>
+  <li><a href="#visualisation-1.-population-pyramid" id="toc-visualisation-1.-population-pyramid" class="nav-link" data-scroll-target="#visualisation-1.-population-pyramid">◼︎  Visualisation 1. Population Pyramid</a></li>
+  <li><a href="#visualisation-2.-dependencyquadrant-visualisation" id="toc-visualisation-2.-dependencyquadrant-visualisation" class="nav-link" data-scroll-target="#visualisation-2.-dependencyquadrant-visualisation">◼︎ Visualisation 2. Dependency‑Quadrant Visualisation</a></li>
   </ul>
 </nav>
     </div>
@@ -420,7 +421,7 @@ Insight from the data structure
 </section>
 </section>
 <section id="visualisation-1.-population-pyramid" class="level2">
-<h2 class="anchored" data-anchor-id="visualisation-1.-population-pyramid">Visualisation 1. Population Pyramid</h2>
+<h2 class="anchored" data-anchor-id="visualisation-1.-population-pyramid">◼︎  Visualisation 1. Population Pyramid</h2>
 <section id="preparing-the-dataset-for-the-population-pyramid" class="level3">
 <h3 class="anchored" data-anchor-id="preparing-the-dataset-for-the-population-pyramid">Preparing the Dataset for the Population Pyramid</h3>
 <p>This code prepares the dataset required to create a grouped and mirrored population pyramid:</p>
@@ -519,9 +520,9 @@ Insights from <strong>Singapore Residents Population Pyramid (2024)</strong>
 <h4 class="anchored" data-anchor-id="agestructure-insights"> Age‑Structure Insights</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 27%">
-<col style="width: 36%">
-<col style="width: 36%">
+<col style="width: 26%">
+<col style="width: 30%">
+<col style="width: 43%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -558,9 +559,9 @@ Insights from <strong>Singapore Residents Population Pyramid (2024)</strong>
 <h4 class="anchored" data-anchor-id="sexstructure-insights"> Sex‑Structure Insights</h4>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 15%">
-<col style="width: 42%">
-<col style="width: 42%">
+<col style="width: 20%">
+<col style="width: 29%">
+<col style="width: 50%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -604,6 +605,163 @@ Insights from <strong>Singapore Residents Population Pyramid (2024)</strong>
 </ul>
 <p>The 2024 pyramid shows Singapore moving from the tail‑end of its demographic dividend toward an ageing society. While gender balance remains healthy, policymakers must simultaneously counter low fertility and prepare for rising dependency to secure long‑term social and economic resilience.</p>
 </section>
+</div>
+</div>
+<p>undefined</p>
+</section>
+</section>
+<section id="visualisation-2.-dependencyquadrant-visualisation" class="level2">
+<h2 class="anchored" data-anchor-id="visualisation-2.-dependencyquadrant-visualisation">◼︎ Visualisation 2. Dependency‑Quadrant Visualisation</h2>
+<p>This section presents the construction of a quadrant visualization to analyze the demographic dependency structure across Singapore’s subzones. The chart compares <strong>youth dependency</strong> and <strong>elderly dependency</strong> in percentile terms, using color and size to communicate dominant patterns and relative magnitudes.</p>
+<section id="data-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation">Data Preparation</h3>
+<p>We first categorize each age into three dependency groups:</p>
+<ul>
+<li><p><strong>Youth</strong>: individuals under 15 years old</p></li>
+<li><p><strong>Working-age</strong>: individuals aged 15 to 64 (15 is lower legal working age limit in SG)</p></li>
+<li><p><strong>Elderly</strong>: individuals aged 65 and above</p></li>
+</ul>
+<p>From this classification, we compute:</p>
+<ul>
+<li><p><strong>YDR (Youth Dependency Ratio)</strong> = Youth / Working-age</p></li>
+<li><p><strong>EDR (Elderly Dependency Ratio)</strong> = Elderly / Working-age</p></li>
+<li><p><strong>Total Dependants</strong> = Youth + Elderly</p></li>
+<li><p><strong>Dominant Group</strong>: <code>"Y_dom"</code> if YDR &gt; EDR; otherwise <code>"O_dom"</code></p></li>
+<li><p><strong>Log Ratio</strong>: <code>log(EDR / YDR)</code>, taking the absolute value later to reflect imbalance magnitude</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ────────── Calculate ratios</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>dep_sz <span class="ot">&lt;-</span> sgresidence <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    age <span class="sc">&lt;</span> <span class="dv">15</span>  <span class="sc">~</span> <span class="st">"Youth"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    age <span class="sc">&gt;=</span> <span class="dv">65</span> <span class="sc">~</span> <span class="st">"Elderly"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span>      <span class="sc">~</span> <span class="st">"Working"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SZ, group) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Pop =</span> <span class="fu">sum</span>(Pop), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> group, <span class="at">values_from =</span> Pop, <span class="at">values_fill =</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">YDR        =</span> Youth <span class="sc">/</span> Working,</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">EDR        =</span> Elderly <span class="sc">/</span> Working,</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Dependants =</span> Youth <span class="sc">+</span> Elderly,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">grp        =</span> <span class="fu">if_else</span>(YDR <span class="sc">&gt;</span> EDR, <span class="st">"Y_dom"</span>, <span class="st">"O_dom"</span>),</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_ratio  =</span> <span class="fu">log</span>(<span class="fu">pmax</span>(EDR, <span class="fl">1e-6</span>) <span class="sc">/</span> <span class="fu">pmax</span>(YDR, <span class="fl">1e-6</span>)),  <span class="co"># avoid log(0)</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">YDR_pct    =</span> <span class="fu">percent_rank</span>(YDR) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">EDR_pct    =</span> <span class="fu">percent_rank</span>(EDR) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Measuring Imbalance Levels</strong></p>
+<p>We use the <strong>absolute value of the log-ratio between EDR and YDR</strong> to reflect the strength of demographic imbalance in a given subzone:</p>
+<ul>
+<li><p>Small log-ratios indicate near-equal youth and elderly burdens</p></li>
+<li><p>Large log-ratios reflect a strong dominance of one group over the other</p></li>
+</ul>
+<p>We segment this imbalance measure into three levels — <strong>Low</strong>, <strong>Mid</strong>, and <strong>High</strong> — using tertiles (33% quantiles).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ────────── Discretize log_ratio into "Low" / "Mid" / "High"</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>dep_plot <span class="ot">&lt;-</span> dep_sz <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">imbalance =</span> <span class="fu">cut</span>(<span class="fu">abs</span>(log_ratio),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">quantile</span>(<span class="fu">abs</span>(log_ratio), <span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>)),</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Low"</span>, <span class="st">"Mid"</span>, <span class="st">"High"</span>),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">include.lowest =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>位置：YDR 和EDR的percentile comparing with other subzones</p>
+<p>colour：how severe the imbalance is between EDR and YDR. Imply the future trend</p>
+<p>Size: population count of Youth+Elder</p>
+<p><strong>Applying a Stepped Color Scheme</strong></p>
+<p>To represent the dominant burden and imbalance depth visually, we assign a <strong>stepped color palette</strong>:</p>
+<ul>
+<li><p><strong>Hue (Yellow vs.&nbsp;Purple)</strong> shows whether youth or elderly is dominant</p></li>
+<li><p><strong>Shade (Light to Dark)</strong> encodes the magnitude of imbalance (Low → High)</p></li>
+</ul>
+<p>For example, a subzone with youth dominance and high imbalance appears in <strong>dark orange</strong>, while a balanced elderly-dominant subzone appears in <strong>light purple</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ────────── Define stepped color table</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>col_tbl <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>grp,     <span class="sc">~</span>imbalance, <span class="sc">~</span>col,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Y_dom"</span>, <span class="st">"Low"</span>,  <span class="st">"#FFF2B2"</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Y_dom"</span>, <span class="st">"Mid"</span>,  <span class="st">"#FFC94A"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Y_dom"</span>, <span class="st">"High"</span>, <span class="st">"#FF9300"</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"O_dom"</span>, <span class="st">"Low"</span>,  <span class="st">"#E3DFF5"</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"O_dom"</span>, <span class="st">"Mid"</span>,  <span class="st">"#AF94E1"</span>,</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"O_dom"</span>, <span class="st">"High"</span>, <span class="st">"#6B42BF"</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ────────── Merge color</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>dep_plot <span class="ot">&lt;-</span> dep_plot <span class="sc">%&gt;%</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(col_tbl, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"grp"</span>, <span class="st">"imbalance"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Plotting the Quadrants</strong></p>
+<p>The final plot is structured as follows:</p>
+<ul>
+<li><p><strong>X-axis</strong>: Youth Dependency Percentile</p></li>
+<li><p><strong>Y-axis</strong>: Elderly Dependency Percentile</p></li>
+<li><p><strong>Quadrant lines</strong>: At 50th percentiles of YDR and EDR, separating 4 zones</p></li>
+<li><p><strong>Color</strong>: Encodes dominance and imbalance</p></li>
+<li><p><strong>Size</strong>: Represents the absolute number of dependants (youth + elderly)</p></li>
+</ul>
+<p>This layered design provides a <strong>multi-dimensional view</strong> of demographic pressures at the subzone level, offering both comparative and magnitude-based insights.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ────────── Plot</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dep_plot, <span class="fu">aes</span>(YDR_pct, EDR_pct)) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">50</span>, <span class="at">color =</span> <span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">50</span>, <span class="at">color =</span> <span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> Dependants, <span class="at">color =</span> col), <span class="at">alpha =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_identity</span>() <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_area</span>(<span class="at">max_size =</span> <span class="dv">12</span>,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">2000</span>, <span class="dv">5000</span>, <span class="dv">10000</span>),</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">labels =</span> comma,</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">name =</span> <span class="st">"Dependants</span><span class="sc">\n</span><span class="st">(headcount)"</span>) <span class="sc">+</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Youth vs Elderly Dependency Ratio of SG Sub Zones Quadrants (2024)"</span>,</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"• Hue: Dominant dependency (Purple-Eldery, Yellow-Youth) </span><span class="sc">\n</span><span class="st">• Depth: Imbalance level (Low / Mid / High) </span><span class="sc">\n</span><span class="st">• Size: Total dependants count"</span>,</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Youth Dependency Percentile (YDP)"</span>,</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Elderly Dependency Percentile (EDP)"</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="youth-vs-elderly-dependency-ratio-of-sg-sub-zones-quadrants-2024" class="level3">
+<h3 class="anchored" data-anchor-id="youth-vs-elderly-dependency-ratio-of-sg-sub-zones-quadrants-2024">Youth vs Elderly Dependency Ratio of SG Sub Zones Quadrants (2024)</h3>
+<p>This quadrant map visualizes the <strong>Youth vs Elderly Dependency Percentiles</strong> across Singapore subzones in 2024. The <strong>x-axis</strong> represents the <strong>Youth Dependency Percentile (YDP)</strong> and the <strong>y-axis</strong> shows the <strong>Elderly Dependency Percentile (EDP)</strong> — both based on national rankings rather than geographic location. Each point represents a subzone, colored by the <strong>dominant dependency type</strong> (yellow for youth-dominated, purple for elderly-dominated), shaded by the <strong>imbalance magnitude</strong>, and sized according to the <strong>total dependent population</strong> (youth + elderly).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-Home_Ex01_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Insight from Youth vs Elderly Dependency Ratio of SG Sub Zones Quadrants (2024)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Subzones in <strong>deeper hues</strong> (both purple and orange) reflect <strong>stronger demographic imbalance</strong>, which could indicate <strong>future demographic stress</strong> if left unaddressed.</p></li>
+<li><p><strong>Larger points</strong> reflect zones where even modest imbalances may be magnified due to <strong>high absolute dependents</strong>, suggesting priority targets for public investment.</p></li>
+</ul>
+<p><strong>Demographic Insights by Quadrant:</strong></p>
+<ul>
+<li><p><strong>Top-right quadrant (High YDP, High EDP):</strong><br>
+Subzones with <strong>dual dependency pressures</strong>. They face <strong>the heaviest overall burden</strong>, with both large youth and elderly populations. These zones may need <strong>multi-generational policy interventions</strong> and robust community support systems.</p></li>
+<li><p><strong>Bottom-right quadrant (High YDP, Low EDP):</strong><br>
+Subzones here have a high concentration of <strong>young dependents</strong> and relatively few elderly. These areas likely include young families or newer developments and may require greater <strong>educational and childcare infrastructure</strong>.</p></li>
+<li><p><strong>Top-left quadrant (Low YDP, High EDP):</strong><br>
+These areas are <strong>elderly-dominant</strong>, with a high burden of aging populations but fewer children. Strategic planning should focus on <strong>eldercare services, mobility aids, and healthcare access</strong>.</p></li>
+<li><p><strong>Bottom-left quadrant (Low YDP, Low EDP):</strong><br>
+Likely <strong>working-age concentrated zones</strong> or <strong>non-residential hubs</strong>, indicating minimal demographic burden. These areas may serve as <strong>commercial or industrial centers</strong>.</p></li>
+</ul>
 </div>
 </div>
 
