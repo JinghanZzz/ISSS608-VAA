@@ -285,7 +285,7 @@ ggplot(pyramid_percent, aes(x = age_group, y = Pop_scaled, fill = Sex)) +
 ####  Age‑Structure Insights
 
 | Observation                                                 | Explanation                                                          | Implication                                                                                            |
-|-------------------|----------------------|--------------------------------|
+|-------------------------------------------------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
 | **Narrow Base** 0–4 yrs ≈ 2.0–2.1 %, 5–14 yrs ≈ 2.4–2.5 %   | Persistently low fertility; few future labour‑market entrants        | Education demand will shrink; fertility incentives or young‑skilled immigration may be needed          |
 | **Pronounced Middle Bulge** – 30–49 yrs ≈ 3.8–4.0 % each    | Core working‑age cohorts dominate, driving current GDP               | In 10–15 years this group retires; pension & re‑skilling systems must be ready                         |
 | **Moderate Ageing** – 65–74 yrs 2.4–3.2 %, 75–84 yrs \< 2 % | Early‑stage ageing, “beehive” not yet inverted                       | Step‑wise expansion of elder‑care & health services is required                                        |
@@ -294,7 +294,7 @@ ggplot(pyramid_percent, aes(x = age_group, y = Pop_scaled, fill = Sex)) +
 ####  Sex‑Structure Insights
 
 | Age band      | Male vs Female                                    | Interpretation                                                                     |
-|---------------|---------------------|------------------------------------|
+|---------------|---------------------------------------------------|------------------------------------------------------------------------------------|
 | **0–14 yrs**  | Slight male surplus (normal biological sex ratio) | No evidence of sex‑selective behaviour                                             |
 | **15–64 yrs** | Virtually symmetric bars                          | Gender balance in the labour force fosters economic stability                      |
 | **65 + yrs**  | Female bars exceed male bars, gap widens 75 +     | Higher female life expectancy; ageing policy must address the needs of older women |
