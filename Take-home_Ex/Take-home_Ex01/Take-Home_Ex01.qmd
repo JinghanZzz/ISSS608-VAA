@@ -517,3 +517,220 @@ ggplot(dep_plot, aes(YDR_pct, EDR_pct)) +
 -   **Bottom-left quadrant (Low YDP, Low EDP):**\
     Likely **working-age concentrated zones** or **non-residential hubs**, indicating minimal demographic burden. These areas may serve as **commercial or industrial centers**.
 :::
+
+## ◼︎ Visualisation 3. Population by Planning Area with Youth & Elderly Dependency Ratios
+
+To construct a stacked bar chart with dependency ratios across Singapore's planning areas, the dataset is first transformed by grouping residents into three age categories:
+
+-   **Youth**: Below 15 years old
+
+-   **WorkingAge**: 15 to 64 years old
+
+-   **Elderly**: 65 years and above
+
+The working-age population forms the denominator for both youth and elderly dependency ratios. The total population is calculated to scale dependency ratios appropriately for plotting. The data is also reshaped into long format to support stacked bar rendering in ggplot2.
+
+```{r}
+# 1. Categorize by Age Group and summarize population
+df_agegroup <- sgresidence %>%
+  mutate(AgeGroup = case_when(
+    Age < 15 ~ "Youth",
+    Age <= 64 ~ "WorkingAge",
+    TRUE ~ "Elderly"
+  )) %>%
+  group_by(PA, AgeGroup) %>%
+  summarise(Pop = sum(Pop), .groups = "drop") %>%
+  pivot_wider(names_from = AgeGroup, values_from = Pop, values_fill = 0) %>%
+  mutate(
+    TotalPop = Youth + WorkingAge + Elderly,
+    ElderlyRatio = Elderly / WorkingAge,
+    YouthRatio = Youth / WorkingAge
+  )
+```
+
+**Plot the Chart**
+
+```{r}
+#| eval: false
+#| fig-width: 9
+#| fig-height: 6
+# 2. Reshape to long format for stacked bar chart
+df_age_long <- df_agegroup %>%
+  pivot_longer(cols = c("Youth", "WorkingAge", "Elderly"),
+               names_to = "AgeGroup", values_to = "Pop") %>%
+  mutate(PA = fct_reorder(PA, -Pop, .fun = sum))
+
+# 3. Compute median values for annotation lines
+median_edr <- median(df_agegroup$ElderlyRatio, na.rm = TRUE)
+median_ydr <- median(df_agegroup$YouthRatio, na.rm = TRUE)
+max_pop <- max(df_agegroup$TotalPop)
+
+# 4. Define custom color palette for age groups
+custom_colors <- c(
+  "Youth" = "#FFD700",        # Gold
+  "WorkingAge" = "#B0B0B0",   # Gray
+  "Elderly" = "#800080"       # Purple
+)
+
+# 5. Create the plot
+ggplot(df_age_long, aes(x = PA, y = Pop, fill = AgeGroup)) +
+  geom_bar(stat = "identity", width = 0.95) +
+
+  # Elderly Dependency Ratio line (deep purple)
+  geom_line(
+    data = df_agegroup,
+    aes(x = PA, y = ElderlyRatio * max_pop / 2, group = 1),
+    inherit.aes = FALSE, color = "#9932CC", size = 1.2
+  ) +
+
+  # Youth Dependency Ratio line (deep orange)
+  geom_line(
+    data = df_agegroup,
+    aes(x = PA, y = YouthRatio * max_pop / 2, group = 1),
+    inherit.aes = FALSE, color = "#E67E22", size = 1.2
+  ) +
+
+  # Median Elderly Dependency Ratio (black line)
+  geom_hline(
+    yintercept = median_edr * max_pop / 2,
+    color = "black", linetype = "solid", size = 0.5
+  ) +
+
+  # Median Youth Dependency Ratio (black line)
+  geom_hline(
+    yintercept = median_ydr * max_pop / 2,
+    color = "black", linetype = "solid", size = 0.5
+  ) +
+
+  scale_fill_manual(values = custom_colors) +
+  scale_y_continuous(
+    name = "Population Count",
+    sec.axis = sec_axis(~ . * 2 / max_pop, name = "Dependency Ratio"),
+    labels = label_number(scale_cut = cut_short_scale())
+  ) +
+  labs(
+    title = "Population by Planning Area with Youth & Elderly Dependency Ratios",
+    x = "Planning Area",
+    fill = "Age Group"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  )
+
+```
+
+### Population by Planning Area with Youth & Elderly Dependency Ratios
+
+The visualises the age structure and demographic burden across Singapore's planning areas. It features:
+
+**Stacked bar segments** showing population counts by age group:
+
+-   **Yellow** for *Youth* (aged below 15),
+
+-   **Gray** for *Working-age* (15–64), and
+
+-   **Purple** for *Elderly* (65+).
+
+**Two overlaid lines** represent dependency ratios:
+
+-   A **purple line** shows the **Elderly Dependency Ratio** (EDR = Elderly / Working-age),
+
+-   An **orange line** represents the **Youth Dependency Ratio** (YDR = Youth / Working-age).
+
+**Two black horizontal lines** indicate the **national median values** for both EDR and YDR, serving as benchmarks.
+
+Planning areas are ordered by total population, from left (most populous) to right (least).
+
+```{r}
+#| echo: false
+#| fig-width: 9
+#| fig-height: 6
+# 2. Reshape to long format for stacked bar chart
+df_age_long <- df_agegroup %>%
+  pivot_longer(cols = c("Youth", "WorkingAge", "Elderly"),
+               names_to = "AgeGroup", values_to = "Pop") %>%
+  mutate(PA = fct_reorder(PA, -Pop, .fun = sum))
+
+# 3. Compute median values for annotation lines
+median_edr <- median(df_agegroup$ElderlyRatio, na.rm = TRUE)
+median_ydr <- median(df_agegroup$YouthRatio, na.rm = TRUE)
+max_pop <- max(df_agegroup$TotalPop)
+
+# 4. Define custom color palette for age groups
+custom_colors <- c(
+  "Youth" = "#FFD700",        # Gold
+  "WorkingAge" = "#B0B0B0",   # Gray
+  "Elderly" = "#800080"       # Purple
+)
+
+# 5. Create the plot
+ggplot(df_age_long, aes(x = PA, y = Pop, fill = AgeGroup)) +
+  geom_bar(stat = "identity", width = 0.95) +
+
+  # Elderly Dependency Ratio line (deep purple)
+  geom_line(
+    data = df_agegroup,
+    aes(x = PA, y = ElderlyRatio * max_pop / 2, group = 1),
+    inherit.aes = FALSE, color = "#9932CC", size = 1.2
+  ) +
+
+  # Youth Dependency Ratio line (deep orange)
+  geom_line(
+    data = df_agegroup,
+    aes(x = PA, y = YouthRatio * max_pop / 2, group = 1),
+    inherit.aes = FALSE, color = "#E67E22", size = 1.2
+  ) +
+
+  # Median Elderly Dependency Ratio (black line)
+  geom_hline(
+    yintercept = median_edr * max_pop / 2,
+    color = "black", linetype = "solid", size = 0.5
+  ) +
+
+  # Median Youth Dependency Ratio (black line)
+  geom_hline(
+    yintercept = median_ydr * max_pop / 2,
+    color = "black", linetype = "solid", size = 0.5
+  ) +
+
+  scale_fill_manual(values = custom_colors) +
+  scale_y_continuous(
+    name = "Population Count",
+    sec.axis = sec_axis(~ . * 2 / max_pop, name = "Dependency Ratio"),
+    labels = label_number(scale_cut = cut_short_scale())
+  ) +
+  labs(
+    title = "Population by Planning Area with Youth & Elderly Dependency Ratios",
+    x = "Planning Area",
+    fill = "Age Group"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  )
+```
+
+::: callout-note
+### Insight from Population by Planning Area with Youth & Elderly Dependency Ratios
+
+**1. Population Distribution Is Highly Uneven**
+
+-   The chart reveals a long-tail distribution: a small number of planning areas (e.g., Tampines, Bedok, Sengkang) account for a disproportionately large share of Singapore’s residents.
+
+-   In contrast, many planning areas on the right — such as Southern Islands, Museum, or Western Water Catchment — have negligible populations and minimal demographic relevance.
+
+-   Implication: Policies addressing population aging or youth development should focus primarily on top-tier planning areas where interventions impact the most people.
+
+**2. Elderly Dependency Outpaces Youth Dependency**
+
+-   In most areas, the purple EDR line lies above the orange YDR line, signaling greater aging pressure than child-related burdens.
+
+-   Mature estates such as Bukit Merah, Queenstown, and Toa Payoh exhibit above-median elderly ratios, pointing to aging-in-place dynamics.
+
+**3. Dependency Burden Must Be Interpreted Alongside Population Scale**
+
+-   A high dependency ratio in a low-population area (e.g., Seletar) is less critical than a moderate ratio in a highly populated town (e.g., Tampines or Jurong West).
+:::
