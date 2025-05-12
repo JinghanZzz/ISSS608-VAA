@@ -16,9 +16,10 @@ website:
           - text: "empty for now"
       - text: "Take-home Exercise"
         menu:
-          - text: "Take-home Exercise 1"
+          - text: "Take-home Exercise 1a"
             href: "Take-home_Ex/Take-home_Ex01/Take-Home_Ex01.html"
-
+          - text: "Take-home Exercise 1b"
+            href: "Take-home_Ex/Take-home_Ex01/Take-Home_Ex1b.html"
     right:
       - href: index.qmd
         text: Home
