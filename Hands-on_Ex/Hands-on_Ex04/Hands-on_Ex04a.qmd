@@ -1,0 +1,13 @@
+\
+
+::: panel-tabset
+## Plot
+
+```{r} #| echo: false}
+```
+
+## Code
+
+```{r} #| eval: false}
+```
+:::

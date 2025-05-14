@@ -17,7 +17,7 @@ In this Phase 2 assignment, I will select one of my classmate’s Phase 1 vi
 
 This original visualisation comes from my classmate's work (ISSS608-Liu Chih Yuan).
 
-![This set of charts was created to visualise the Singapore demographic feature based on a dataset shared by  [Department of Statistics, Singapore (DOS)](https://www.singstat.gov.sg/) named *Singapore Residents by Planning Area / Subzone, Single Year of Age and Sex, June 2024*.](Original Visualisation.png)
+![This set of charts was created to visualise the Singapore demographic feature based on a dataset shared by  [Department of Statistics, Singapore (DOS)](https://www.singstat.gov.sg/) named *Singapore Residents by Planning Area / Subzone, Single Year of Age and Sex, June 2024*.](Original%20Visualisation.png)
 
 Liu's insight drawn from this charts are :
 
