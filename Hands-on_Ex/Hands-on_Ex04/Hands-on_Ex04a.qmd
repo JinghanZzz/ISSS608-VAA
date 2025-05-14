@@ -3,11 +3,9 @@
 ::: panel-tabset
 ## Plot
 
-```{r} #| echo: false}
-```
+`{r} #| echo: false}`
 
 ## Code
 
-```{r} #| eval: false}
-```
+`{r} #| eval: false}`
 :::
