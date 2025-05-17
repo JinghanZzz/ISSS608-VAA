@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.33">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Zhang Jinghan">
+
+<title>Take-Home Exercise 01: Demographic Structures and Distribution of Singapore in 2024</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Take-Home_Ex01_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Take-Home_Ex01_files/libs/quarto-html/quarto.js"></script>
+<script src="Take-Home_Ex01_files/libs/quarto-html/popper.min.js"></script>
+<script src="Take-Home_Ex01_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Take-Home_Ex01_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Take-Home_Ex01_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Take-Home_Ex01_files/libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Take-Home_Ex01_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Take-Home_Ex01_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Take-Home_Ex01_files/libs/bootstrap/bootstrap-b8d30c7eeda119d43de224048e70de8f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Take-Home Exercise 01: Demographic Structures and Distribution of Singapore in 2024</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Zhang Jinghan </p>
+          </div>
+  </div>
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">May 5, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview"><strong>Overview</strong></h2>
+<section id="task" class="level3">
+<h3 class="anchored" data-anchor-id="task">Task</h3>
+<p>A local online media company that publishes daily content on digital platforms is planning to release an article on&nbsp;<strong>demographic structures and distribution of Singapore in 2024</strong>. Assuming the role of the graphical editor of the media company, you are tasked to prepare&nbsp;<strong>at most three data visualisation</strong>&nbsp;for the article.</p>
+</section>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">Data</h3>
+<p>To accomplish the task,&nbsp;<em>Singapore Residents by Planning Area / Subzone, Single Year of Age and Sex, June 2024</em>&nbsp;dataset shares by&nbsp;<a href="https://www.singstat.gov.sg/">Department of Statistics, Singapore (DOS)</a>&nbsp;will be used.</p>
+</section>
+<section id="tool-packages" class="level3">
+<h3 class="anchored" data-anchor-id="tool-packages">Tool &amp; Packages</h3>
+<p>This is an R based visual analytic task. Data will be processed by appropriate&nbsp;<strong>tidyverse</strong>&nbsp;family of packages and the data visualisation will be prepared using&nbsp;<strong>ggplot2</strong>&nbsp;and its extensions.</p>
+<ul>
+<li><p><strong>tidyverse：</strong>a family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.</p></li>
+<li><p><strong>patchwork：</strong>for combining multiple ggplot2 graphs into one figure.</p></li>
+</ul>
+<!-- -->
+<ul>
+<li><p><strong>ggrepel</strong>: an R package provides geoms for ggplot2 to repel overlapping text labels.</p></li>
+<li><p><strong>ggthemes</strong>: an R package provides some extra themes, geoms, and scales for ‘ggplot2’.</p></li>
+<li><p><strong>hrbrthemes</strong>: an R package provides typography-centric themes and theme components for ggplot2.</p></li>
+<li><p><strong>scales</strong>: provides the internal scaling infrastructure used by <strong>ggplot2</strong></p></li>
+<li><p><strong>ggdist</strong>: for visualizations of distributions and uncertainty</p></li>
+</ul>
+<p>The following code chunk uses&nbsp;<code>p_load()</code>&nbsp;of&nbsp;<a href="https://rpubs.com/akshaypatankar/594834"><strong>pacman</strong></a>&nbsp;package to check if tidyverse packages are installed in the computer. If they are, the libraries will be called into R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, patchwork, ggrepel, ggthemes, hrbrthemes, scales, ggdist,dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="getting-started" class="level2">
+<h2 class="anchored" data-anchor-id="getting-started"><strong>Getting Started</strong></h2>
+<section id="import-data" class="level3">
+<h3 class="anchored" data-anchor-id="import-data">Import Data</h3>
+<p>In this exercise, respopagesex2024.csv is used.</p>
+<p>The code chunk below <code>read_csv()</code> of <strong>readr</strong> package is used to import respopagesex2024<em>.csv</em> data file into R and save it as an tibble data frame called <code>sgresidence</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sgresidence <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/respopagesex2024.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-cleaning-and-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-cleaning-and-preparation">Data Cleaning and Preparation</h3>
+<p>Use the code chunk below to view the data structure and summary data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(sgresidence)      </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 60,424
+Columns: 6
+$ PA   &lt;chr&gt; "Ang Mo Kio", "Ang Mo Kio", "Ang Mo Kio", "Ang Mo Kio", "Ang Mo K…
+$ SZ   &lt;chr&gt; "Ang Mo Kio Town Centre", "Ang Mo Kio Town Centre", "Ang Mo Kio T…
+$ Age  &lt;chr&gt; "0", "0", "1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", …
+$ Sex  &lt;chr&gt; "Males", "Females", "Males", "Females", "Males", "Females", "Male…
+$ Pop  &lt;dbl&gt; 10, 10, 10, 10, 10, 10, 10, 10, 30, 10, 20, 10, 20, 30, 30, 10, 3…
+$ Time &lt;dbl&gt; 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024, 2024,…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(sgresidence, <span class="dv">10</span>)    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 6
+   PA         SZ                     Age   Sex       Pop  Time
+   &lt;chr&gt;      &lt;chr&gt;                  &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
+ 1 Ang Mo Kio Ang Mo Kio Town Centre 0     Males      10  2024
+ 2 Ang Mo Kio Ang Mo Kio Town Centre 0     Females    10  2024
+ 3 Ang Mo Kio Ang Mo Kio Town Centre 1     Males      10  2024
+ 4 Ang Mo Kio Ang Mo Kio Town Centre 1     Females    10  2024
+ 5 Ang Mo Kio Ang Mo Kio Town Centre 2     Males      10  2024
+ 6 Ang Mo Kio Ang Mo Kio Town Centre 2     Females    10  2024
+ 7 Ang Mo Kio Ang Mo Kio Town Centre 3     Males      10  2024
+ 8 Ang Mo Kio Ang Mo Kio Town Centre 3     Females    10  2024
+ 9 Ang Mo Kio Ang Mo Kio Town Centre 4     Males      30  2024
+10 Ang Mo Kio Ang Mo Kio Town Centre 4     Females    10  2024</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(sgresidence)     </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [60,424 × 6] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ PA  : chr [1:60424] "Ang Mo Kio" "Ang Mo Kio" "Ang Mo Kio" "Ang Mo Kio" ...
+ $ SZ  : chr [1:60424] "Ang Mo Kio Town Centre" "Ang Mo Kio Town Centre" "Ang Mo Kio Town Centre" "Ang Mo Kio Town Centre" ...
+ $ Age : chr [1:60424] "0" "0" "1" "1" ...
+ $ Sex : chr [1:60424] "Males" "Females" "Males" "Females" ...
+ $ Pop : num [1:60424] 10 10 10 10 10 10 10 10 30 10 ...
+ $ Time: num [1:60424] 2024 2024 2024 2024 2024 ...
+ - attr(*, "spec")=
+  .. cols(
+  ..   PA = col_character(),
+  ..   SZ = col_character(),
+  ..   Age = col_character(),
+  ..   Sex = col_character(),
+  ..   Pop = col_double(),
+  ..   Time = col_double()
+  .. )
+ - attr(*, "problems")=&lt;externalptr&gt; </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sgresidence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      PA                 SZ                Age                Sex           
+ Length:60424       Length:60424       Length:60424       Length:60424      
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+      Pop              Time     
+ Min.   :   0.0   Min.   :2024  
+ 1st Qu.:   0.0   1st Qu.:2024  
+ Median :  20.0   Median :2024  
+ Mean   :  69.4   Mean   :2024  
+ 3rd Qu.:  90.0   3rd Qu.:2024  
+ Max.   :1180.0   Max.   :2024  </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Insight from the data structure
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The dataset contains <strong>60,424 rows</strong> and <strong>6 variables</strong>, describing Singapore’s resident population by planning area, subzone, single year of age, sex, and population count, as of June 2024.</p>
+<ul>
+<li><p><code>PA</code> and <code>SZ</code> are <strong>character variables</strong> representing planning areas and subzones, respectively.</p></li>
+<li><p><code>Age</code> is a <strong>categorical variables</strong> in character format, indicating demographic groups which will be converted to numeric for analysis.</p></li>
+<li><p><code>Sex</code> is a <strong>categorical variable</strong> with values <code>"Males"</code> and <code>"Females"</code>, which will be standardized to <code>"Male"</code> and <code>"Female"</code>.</p></li>
+<li><p><code>Pop</code> is a <strong>numeric variable</strong> representing the number of residents in each demographic segment. The population values range from <strong>0 to 1,180</strong>, with a median of <strong>20</strong>, suggesting that most records represent small population counts at a fine-grained level (e.g., age–sex–subzone).</p>
+<p>Since records with 0 population do not contribute to aggregate demographic statistics or visualizations, we removed all rows where <code>Pop = 0</code>. This ensures that all retained records represent meaningful demographic segments, streamlining the analysis and improving the clarity of visual outputs.</p></li>
+<li><p><code>Time</code> is a <strong>characteristically constant variable</strong>, with all values equal to <strong>2024</strong>. Since it contains no variation, it will be removed from the analytical dataset or used solely for reference in visualization annotations.</p></li>
+</ul>
+</div>
+</div>
+<p><strong>Check missing values</strong></p>
+<p>The outcome of the code shows that there is no missing value in this sgresidence.csv.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(sgresidence)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  PA   SZ  Age  Sex  Pop Time 
+   0    0    0    0    0    0 </code></pre>
+</div>
+</div>
+<p><strong>Convert <code>Age</code> to Numeric Value</strong></p>
+<p>The dataset includes an open-ended age group labeled <code>"90_and_Over"</code>, which was recoded as <code>"90"</code> for analysis. While this simplification may slightly understate the true average age among the elderly, the affected population comprises only 0.603% of the total and does not significantly distort demographic patterns at an aggregate level.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sgresidence <span class="ot">&lt;-</span> sgresidence <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age =</span> <span class="fu">as.integer</span>(Age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The outcome says mutating data type leads to NA so check which part lead to this issue</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sgresidence <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(<span class="fu">as.integer</span>(Age))) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  Age        
+  &lt;chr&gt;      
+1 90_and_Over</code></pre>
+</div>
+</div>
+<p>Check the proportion of 90 and over age group</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sgresidence <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Age <span class="sc">==</span> <span class="st">"90_and_Over"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_90plus =</span> <span class="fu">sum</span>(Pop)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_pop =</span> <span class="fu">sum</span>(sgresidence<span class="sc">$</span>Pop),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">percent =</span> total_90plus <span class="sc">/</span> total_pop <span class="sc">*</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  total_90plus total_pop percent
+         &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1        25290   4193530   0.603</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sgresidence <span class="ot">&lt;-</span> sgresidence <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">Age =</span> <span class="fu">ifelse</span>(Age <span class="sc">==</span> <span class="st">"90_and_Over"</span>, <span class="st">"90"</span>, Age),</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">age =</span> <span class="fu">as.integer</span>(Age)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Standardise Sex</strong></p>
+<p>The <code>Sex</code> variable is a categorical field originally recorded as <code>"Males"</code> and <code>"Females"</code>. For consistency and clarity in analysis and visualization, these values were standardised to <code>"Male"</code> and <code>"Female"</code> respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sgresidence <span class="ot">&lt;-</span> sgresidence <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Sex =</span> <span class="fu">recode</span>(Sex,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Males"</span> <span class="ot">=</span> <span class="st">"Male"</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Females"</span> <span class="ot">=</span> <span class="st">"Female"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Remove Rows with Pop = 0</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sgresidence <span class="ot">&lt;-</span> sgresidence <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Pop <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Drop Time Col</strong></p>
+<p>Since all the data are in the same time, we drop this column</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sgresidence <span class="ot">&lt;-</span> sgresidence <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="visualisation-1.-population-pyramid" class="level2">
+<h2 class="anchored" data-anchor-id="visualisation-1.-population-pyramid">◼︎  Visualisation 1. Population Pyramid</h2>
+<section id="preparing-the-dataset-for-the-population-pyramid" class="level3">
+<h3 class="anchored" data-anchor-id="preparing-the-dataset-for-the-population-pyramid">Preparing the Dataset for the Population Pyramid</h3>
+<p>This code prepares the dataset required to create a grouped and mirrored population pyramid:</p>
+<ul>
+<li><p><strong>Grouping by Age Group and Sex</strong>:<br>
+The dataset <code>sgresidence</code> is grouped by 5-year age intervals and <code>Sex</code> using the <code>cut()</code> and <code>group_by()</code> functions. This step ensures population values are aggregated into standard demographic segments.</p></li>
+<li><p><strong>Summing the Population</strong>:<br>
+For each <code>age_group</code> and <code>Sex</code> combination, the total population is calculated using <code>sum(Pop)</code>. This provides the count of people within each demographic bin.</p></li>
+<li><p><strong>Computing Percentages and Labels</strong>:<br>
+Within each gender group, the proportion of each age group is computed (<code>percent = Pop / total</code>). Labels with one decimal point (e.g., <code>"7.2%"</code>) are created for display next to bars.</p></li>
+<li><p><strong>Adjusting Population Values for Males</strong>:<br>
+To construct a mirrored population pyramid, population counts for males are multiplied by <code>-1</code>. This positions male bars on the left side and female bars on the right.</p></li>
+<li><p><strong>Preparing Axis Breaks and Annotations</strong>:<br>
+Auxiliary variables are computed (<code>max_y</code>, <code>top_age_group</code>) to help position axis breaks and top annotations like “Male” and “Female”.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Calculate total population</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>total_pop <span class="ot">&lt;-</span> <span class="fu">sum</span>(sgresidence<span class="sc">$</span>Pop)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2: Aggregate and calculate percent based on total population</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>pyramid_percent <span class="ot">&lt;-</span> sgresidence <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age_group =</span> <span class="fu">cut</span>(age,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">breaks =</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">5</span>), <span class="cn">Inf</span>),</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">right =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="fu">str_c</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">85</span>, <span class="dv">5</span>), <span class="st">"-"</span>, <span class="fu">seq</span>(<span class="dv">4</span>, <span class="dv">89</span>, <span class="dv">5</span>)), <span class="st">"90+"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(age_group, Sex) <span class="sc">%&gt;%</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Pop =</span> <span class="fu">sum</span>(Pop), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">percent =</span> Pop <span class="sc">/</span> total_pop <span class="sc">*</span> <span class="dv">100</span>,  <span class="co"># ✅ Percent relative to total population</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Pop_scaled =</span> <span class="fu">if_else</span>(Sex <span class="sc">==</span> <span class="st">"Male"</span>, <span class="sc">-</span>Pop, Pop),</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">str_c</span>(<span class="fu">sprintf</span>(<span class="st">"%.1f"</span>, percent), <span class="st">"%"</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 3: Annotations</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>top_age_group <span class="ot">&lt;-</span> pyramid_percent <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(age_group) <span class="sc">%&gt;%</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">1</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>max_y <span class="ot">&lt;-</span> <span class="fu">max</span>(pyramid_percent<span class="sc">$</span>Pop)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 4: Plotting</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pyramid_percent, <span class="fu">aes</span>(<span class="at">x =</span> age_group, <span class="at">y =</span> Pop_scaled, <span class="at">fill =</span> Sex)) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.95</span>) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> label,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">hjust =</span> <span class="fu">if_else</span>(Sex <span class="sc">==</span> <span class="st">"Male"</span>, <span class="fl">1.05</span>, <span class="sc">-</span><span class="fl">0.05</span>)),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">150000</span>, <span class="sc">-</span><span class="dv">100000</span>, <span class="sc">-</span><span class="dv">50000</span>, <span class="dv">50000</span>, <span class="dv">100000</span>, <span class="dv">150000</span>),</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"grey80"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">150000</span>, <span class="dv">150000</span>, <span class="at">by =</span> <span class="dv">50000</span>),</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="cf">function</span>(x) <span class="fu">paste0</span>(<span class="fu">abs</span>(x) <span class="sc">/</span> <span class="dv">1000</span>, <span class="st">"k"</span>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Male"</span> <span class="ot">=</span> <span class="st">"#ADD8E6"</span>, <span class="st">"Female"</span> <span class="ot">=</span> <span class="st">"#F4A6A6"</span>)) <span class="sc">+</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> top_age_group, <span class="at">y =</span> <span class="sc">-</span>max_y <span class="sc">*</span> <span class="fl">0.9</span>, <span class="at">label =</span> <span class="st">"Male"</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> top_age_group, <span class="at">y =</span> max_y <span class="sc">*</span> <span class="fl">0.9</span>, <span class="at">label =</span> <span class="st">"Female"</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">"gray20"</span>) <span class="sc">+</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Singapore Residents Population Pyramid (2024)"</span>,</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Age Group"</span>,</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Population"</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">14</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">10</span>))</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="singapore-residents-population-pyramid-2024" class="level3">
+<h3 class="anchored" data-anchor-id="singapore-residents-population-pyramid-2024">Singapore Residents Population Pyramid (2024)</h3>
+<p>The Singapore Residents Population Pyramid (2024) plots absolute population on the x‑axis (in thousands, “k”) and 5‑year age groups on the y‑axis, with males (light blue) on the left and females (light red) on the right. Percent labels above each bar show that cohort’s share of the <strong>total</strong> national population.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-Home_Ex01_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Insights from <strong>Singapore Residents Population Pyramid (2024)</strong>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<section id="agestructure-insights" class="level4">
+<h4 class="anchored" data-anchor-id="agestructure-insights"> Age‑Structure Insights</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 29%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Observation</th>
+<th>Explanation</th>
+<th>Implication</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Narrow Base</strong> 0–4 yrs ≈ 2.0–2.1 %, 5–14 yrs ≈ 2.4–2.5 %</td>
+<td>Persistently low fertility; few future labour‑market entrants</td>
+<td>Education demand will shrink; fertility incentives or young‑skilled immigration may be needed</td>
+</tr>
+<tr class="even">
+<td><strong>Pronounced Middle Bulge</strong> – 30–49 yrs ≈ 3.8–4.0 % each</td>
+<td>Core working‑age cohorts dominate, driving current GDP</td>
+<td>In 10–15 years this group retires; pension &amp; re‑skilling systems must be ready</td>
+</tr>
+<tr class="odd">
+<td><strong>Moderate Ageing</strong> – 65–74 yrs 2.4–3.2 %, 75–84 yrs &lt; 2 %</td>
+<td>Early‑stage ageing, “beehive” not yet inverted</td>
+<td>Step‑wise expansion of elder‑care &amp; health services is required</td>
+</tr>
+<tr class="even">
+<td><strong>Rising Dependency Ratio</strong></td>
+<td>Seniors growing faster than children while the working share shrinks</td>
+<td>Higher fiscal and social‑security pressure; need to lift labour‑force participation &amp; delay retirement</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sexstructure-insights" class="level4">
+<h4 class="anchored" data-anchor-id="sexstructure-insights"> Sex‑Structure Insights</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 34%">
+<col style="width: 56%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Age band</th>
+<th>Male vs Female</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0–14 yrs</strong></td>
+<td>Slight male surplus (normal biological sex ratio)</td>
+<td>No evidence of sex‑selective behaviour</td>
+</tr>
+<tr class="even">
+<td><strong>15–64 yrs</strong></td>
+<td>Virtually symmetric bars</td>
+<td>Gender balance in the labour force fosters economic stability</td>
+</tr>
+<tr class="odd">
+<td><strong>65 + yrs</strong></td>
+<td>Female bars exceed male bars, gap widens 75 +</td>
+<td>Higher female life expectancy; ageing policy must address the needs of older women</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="key-takeaways" class="level4">
+<h4 class="anchored" data-anchor-id="key-takeaways">Key Take‑Aways</h4>
+<ul>
+<li><p><strong>Low‑fertility, early‑ageing profile</strong> – The pyramid has a narrow base and moderate top, signalling declining births and a gradual demographic transition toward ageing.</p></li>
+<li><p><strong>Late‑stage demographic dividend</strong> – The 30–49 bulge still powers the economy but will soon shift into retirement.</p></li>
+<li><p><strong>Healthy overall sex ratio</strong> – Only the expected female advantage at advanced ages; no structural gender imbalance.</p></li>
+</ul>
+<p><strong>Policy Priorities</strong></p>
+<ul>
+<li><p>Boost fertility through childcare, housing and family incentives.</p></li>
+<li><p>Extend working lives via lifelong learning, re‑skilling, and flexible retirement.</p></li>
+<li><p>Scale up community healthcare and long‑term‑care capacity, with a focus on elderly women living alone.</p></li>
+<li><p>Selectively attract young, skilled immigrants to stabilise the age pyramid and sustain growth.</p></li>
+</ul>
+<p>The 2024 pyramid shows Singapore moving from the tail‑end of its demographic dividend toward an ageing society. While gender balance remains healthy, policymakers must simultaneously counter low fertility and prepare for rising dependency to secure long‑term social and economic resilience.</p>
+</section>
+</div>
+</div>
+<p>undefined</p>
+</section>
+</section>
+<section id="visualisation-2.-dependencyquadrant-visualisation" class="level2">
+<h2 class="anchored" data-anchor-id="visualisation-2.-dependencyquadrant-visualisation">◼︎ Visualisation 2. Dependency‑Quadrant Visualisation</h2>
+<p>This section presents the construction of a quadrant visualization to analyze the demographic dependency structure across Singapore’s subzones. The chart compares <strong>youth dependency</strong> and <strong>elderly dependency</strong> in percentile terms, using color and size to communicate dominant patterns and relative magnitudes.</p>
+<section id="data-preparation" class="level3">
+<h3 class="anchored" data-anchor-id="data-preparation">Data Preparation</h3>
+<p>We first categorize each age into three dependency groups:</p>
+<ul>
+<li><p><strong>Youth</strong>: individuals under 15 years old</p></li>
+<li><p><strong>Working-age</strong>: individuals aged 15 to 64 (15 is lower legal working age limit in SG)</p></li>
+<li><p><strong>Elderly</strong>: individuals aged 65 and above</p></li>
+</ul>
+<p>From this classification, we compute:</p>
+<ul>
+<li><p><strong>YDR (Youth Dependency Ratio)</strong> = Youth / Working-age</p></li>
+<li><p><strong>EDR (Elderly Dependency Ratio)</strong> = Elderly / Working-age</p></li>
+<li><p><strong>Total Dependants</strong> = Youth + Elderly</p></li>
+<li><p><strong>Dominant Group</strong>: <code>"Y_dom"</code> if YDR &gt; EDR; otherwise <code>"O_dom"</code></p></li>
+<li><p><strong>Log Ratio</strong>: <code>log(EDR / YDR)</code>, taking the absolute value later to reflect imbalance magnitude</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ────────── Calculate ratios</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>dep_sz <span class="ot">&lt;-</span> sgresidence <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    age <span class="sc">&lt;</span> <span class="dv">15</span>  <span class="sc">~</span> <span class="st">"Youth"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    age <span class="sc">&gt;=</span> <span class="dv">65</span> <span class="sc">~</span> <span class="st">"Elderly"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span>      <span class="sc">~</span> <span class="st">"Working"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SZ, group) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Pop =</span> <span class="fu">sum</span>(Pop), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> group, <span class="at">values_from =</span> Pop, <span class="at">values_fill =</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">YDR        =</span> Youth <span class="sc">/</span> Working,</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">EDR        =</span> Elderly <span class="sc">/</span> Working,</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Dependants =</span> Youth <span class="sc">+</span> Elderly,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">grp        =</span> <span class="fu">if_else</span>(YDR <span class="sc">&gt;</span> EDR, <span class="st">"Y_dom"</span>, <span class="st">"O_dom"</span>),</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_ratio  =</span> <span class="fu">log</span>(<span class="fu">pmax</span>(EDR, <span class="fl">1e-6</span>) <span class="sc">/</span> <span class="fu">pmax</span>(YDR, <span class="fl">1e-6</span>)),  <span class="co"># avoid log(0)</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">YDR_pct    =</span> <span class="fu">percent_rank</span>(YDR) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">EDR_pct    =</span> <span class="fu">percent_rank</span>(EDR) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Measuring Imbalance Levels</strong></p>
+<p>We use the <strong>absolute value of the log-ratio between EDR and YDR</strong> to reflect the strength of demographic imbalance in a given subzone:</p>
+<ul>
+<li><p>Small log-ratios indicate near-equal youth and elderly burdens</p></li>
+<li><p>Large log-ratios reflect a strong dominance of one group over the other</p></li>
+</ul>
+<p>We segment this imbalance measure into three levels — <strong>Low</strong>, <strong>Mid</strong>, and <strong>High</strong> — using tertiles (33% quantiles).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ────────── Discretize log_ratio into "Low" / "Mid" / "High"</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>dep_plot <span class="ot">&lt;-</span> dep_sz <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">imbalance =</span> <span class="fu">cut</span>(<span class="fu">abs</span>(log_ratio),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">breaks =</span> <span class="fu">quantile</span>(<span class="fu">abs</span>(log_ratio), <span class="at">probs =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span>)),</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Low"</span>, <span class="st">"Mid"</span>, <span class="st">"High"</span>),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">include.lowest =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>位置：YDR 和EDR的percentile comparing with other subzones</p>
+<p>colour：how severe the imbalance is between EDR and YDR. Imply the future trend</p>
+<p>Size: population count of Youth+Elder</p>
+<p><strong>Applying a Stepped Color Scheme</strong></p>
+<p>To represent the dominant burden and imbalance depth visually, we assign a <strong>stepped color palette</strong>:</p>
+<ul>
+<li><p><strong>Hue (Yellow vs.&nbsp;Purple)</strong> shows whether youth or elderly is dominant</p></li>
+<li><p><strong>Shade (Light to Dark)</strong> encodes the magnitude of imbalance (Low → High)</p></li>
+</ul>
+<p>For example, a subzone with youth dominance and high imbalance appears in <strong>dark orange</strong>, while a balanced elderly-dominant subzone appears in <strong>light purple</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ────────── Define stepped color table</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>col_tbl <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>grp,     <span class="sc">~</span>imbalance, <span class="sc">~</span>col,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Y_dom"</span>, <span class="st">"Low"</span>,  <span class="st">"#FFF2B2"</span>,</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Y_dom"</span>, <span class="st">"Mid"</span>,  <span class="st">"#FFC94A"</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Y_dom"</span>, <span class="st">"High"</span>, <span class="st">"#FF9300"</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"O_dom"</span>, <span class="st">"Low"</span>,  <span class="st">"#E3DFF5"</span>,</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"O_dom"</span>, <span class="st">"Mid"</span>,  <span class="st">"#AF94E1"</span>,</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"O_dom"</span>, <span class="st">"High"</span>, <span class="st">"#6B42BF"</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ────────── Merge color</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>dep_plot <span class="ot">&lt;-</span> dep_plot <span class="sc">%&gt;%</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(col_tbl, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"grp"</span>, <span class="st">"imbalance"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Plotting the Quadrants</strong></p>
+<p>The final plot is structured as follows:</p>
+<ul>
+<li><p><strong>X-axis</strong>: Youth Dependency Percentile</p></li>
+<li><p><strong>Y-axis</strong>: Elderly Dependency Percentile</p></li>
+<li><p><strong>Quadrant lines</strong>: At 50th percentiles of YDR and EDR, separating 4 zones</p></li>
+<li><p><strong>Color</strong>: Encodes dominance and imbalance</p></li>
+<li><p><strong>Size</strong>: Represents the absolute number of dependants (youth + elderly)</p></li>
+</ul>
+<p>This layered design provides a <strong>multi-dimensional view</strong> of demographic pressures at the subzone level, offering both comparative and magnitude-based insights.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ────────── Plot</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dep_plot, <span class="fu">aes</span>(YDR_pct, EDR_pct)) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">50</span>, <span class="at">color =</span> <span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">50</span>, <span class="at">color =</span> <span class="st">"gray60"</span>) <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> Dependants, <span class="at">color =</span> col), <span class="at">alpha =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_identity</span>() <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_area</span>(<span class="at">max_size =</span> <span class="dv">12</span>,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">2000</span>, <span class="dv">5000</span>, <span class="dv">10000</span>),</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">labels =</span> comma,</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">name =</span> <span class="st">"Dependants</span><span class="sc">\n</span><span class="st">(headcount)"</span>) <span class="sc">+</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Youth vs Elderly Dependency Ratio of SG Sub Zones Quadrants (2024)"</span>,</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"• Hue: Dominant dependency (Purple-Eldery, Yellow-Youth) </span><span class="sc">\n</span><span class="st">• Depth: Imbalance level (Low / Mid / High) </span><span class="sc">\n</span><span class="st">• Size: Total dependants count"</span>,</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Youth Dependency Percentile (YDP)"</span>,</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Elderly Dependency Percentile (EDP)"</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">11</span>) <span class="sc">+</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="youth-vs-elderly-dependency-ratio-of-sg-sub-zones-quadrants-2024" class="level3">
+<h3 class="anchored" data-anchor-id="youth-vs-elderly-dependency-ratio-of-sg-sub-zones-quadrants-2024">Youth vs Elderly Dependency Ratio of SG Sub Zones Quadrants (2024)</h3>
+<p>This quadrant map visualizes the <strong>Youth vs Elderly Dependency Percentiles</strong> across Singapore subzones in 2024. The <strong>x-axis</strong> represents the <strong>Youth Dependency Percentile (YDP)</strong> and the <strong>y-axis</strong> shows the <strong>Elderly Dependency Percentile (EDP)</strong> — both based on national rankings rather than geographic location. Each point represents a subzone, colored by the <strong>dominant dependency type</strong> (yellow for youth-dominated, purple for elderly-dominated), shaded by the <strong>imbalance magnitude</strong>, and sized according to the <strong>total dependent population</strong> (youth + elderly).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-Home_Ex01_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Insight from Youth vs Elderly Dependency Ratio of SG Sub Zones Quadrants (2024)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Subzones in <strong>deeper hues</strong> (both purple and orange) reflect <strong>stronger demographic imbalance</strong>, which could indicate <strong>future demographic stress</strong> if left unaddressed.</p></li>
+<li><p><strong>Larger points</strong> reflect zones where even modest imbalances may be magnified due to <strong>high absolute dependents</strong>, suggesting priority targets for public investment.</p></li>
+</ul>
+<p><strong>Demographic Insights by Quadrant:</strong></p>
+<ul>
+<li><p><strong>Top-right quadrant (High YDP, High EDP):</strong><br>
+Subzones with <strong>dual dependency pressures</strong>. They face <strong>the heaviest overall burden</strong>, with both large youth and elderly populations. These zones may need <strong>multi-generational policy interventions</strong> and robust community support systems.</p></li>
+<li><p><strong>Bottom-right quadrant (High YDP, Low EDP):</strong><br>
+Subzones here have a high concentration of <strong>young dependents</strong> and relatively few elderly. These areas likely include young families or newer developments and may require greater <strong>educational and childcare infrastructure</strong>.</p></li>
+<li><p><strong>Top-left quadrant (Low YDP, High EDP):</strong><br>
+These areas are <strong>elderly-dominant</strong>, with a high burden of aging populations but fewer children. Strategic planning should focus on <strong>eldercare services, mobility aids, and healthcare access</strong>.</p></li>
+<li><p><strong>Bottom-left quadrant (Low YDP, Low EDP):</strong><br>
+Likely <strong>working-age concentrated zones</strong> or <strong>non-residential hubs</strong>, indicating minimal demographic burden. These areas may serve as <strong>commercial or industrial centers</strong>.</p></li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="visualisation-3.-population-by-planning-area-with-youth-elderly-dependency-ratios" class="level2">
+<h2 class="anchored" data-anchor-id="visualisation-3.-population-by-planning-area-with-youth-elderly-dependency-ratios">◼︎ Visualisation 3. Population by Planning Area with Youth &amp; Elderly Dependency Ratios</h2>
+<p>To construct a stacked bar chart with dependency ratios across Singapore’s planning areas, the dataset is first transformed by grouping residents into three age categories:</p>
+<ul>
+<li><p><strong>Youth</strong>: Below 15 years old</p></li>
+<li><p><strong>WorkingAge</strong>: 15 to 64 years old</p></li>
+<li><p><strong>Elderly</strong>: 65 years and above</p></li>
+</ul>
+<p>The working-age population forms the denominator for both youth and elderly dependency ratios. The total population is calculated to scale dependency ratios appropriately for plotting. The data is also reshaped into long format to support stacked bar rendering in ggplot2.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Categorize by Age Group and summarize population</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>df_agegroup <span class="ot">&lt;-</span> sgresidence <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AgeGroup =</span> <span class="fu">case_when</span>(</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    Age <span class="sc">&lt;</span> <span class="dv">15</span> <span class="sc">~</span> <span class="st">"Youth"</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    Age <span class="sc">&lt;=</span> <span class="dv">64</span> <span class="sc">~</span> <span class="st">"WorkingAge"</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Elderly"</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(PA, AgeGroup) <span class="sc">%&gt;%</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Pop =</span> <span class="fu">sum</span>(Pop), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> AgeGroup, <span class="at">values_from =</span> Pop, <span class="at">values_fill =</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">TotalPop =</span> Youth <span class="sc">+</span> WorkingAge <span class="sc">+</span> Elderly,</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">ElderlyRatio =</span> Elderly <span class="sc">/</span> WorkingAge,</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">YouthRatio =</span> Youth <span class="sc">/</span> WorkingAge</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Plot the Chart</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Reshape to long format for stacked bar chart</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>df_age_long <span class="ot">&lt;-</span> df_agegroup <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"Youth"</span>, <span class="st">"WorkingAge"</span>, <span class="st">"Elderly"</span>),</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"AgeGroup"</span>, <span class="at">values_to =</span> <span class="st">"Pop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PA =</span> <span class="fu">fct_reorder</span>(PA, <span class="sc">-</span>Pop, <span class="at">.fun =</span> sum))</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Compute median values for annotation lines</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>median_edr <span class="ot">&lt;-</span> <span class="fu">median</span>(df_agegroup<span class="sc">$</span>ElderlyRatio, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>median_ydr <span class="ot">&lt;-</span> <span class="fu">median</span>(df_agegroup<span class="sc">$</span>YouthRatio, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>max_pop <span class="ot">&lt;-</span> <span class="fu">max</span>(df_agegroup<span class="sc">$</span>TotalPop)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Define custom color palette for age groups</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>custom_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Youth"</span> <span class="ot">=</span> <span class="st">"#FFD700"</span>,        <span class="co"># Gold</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"WorkingAge"</span> <span class="ot">=</span> <span class="st">"#B0B0B0"</span>,   <span class="co"># Gray</span></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Elderly"</span> <span class="ot">=</span> <span class="st">"#800080"</span>       <span class="co"># Purple</span></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Create the plot</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_age_long, <span class="fu">aes</span>(<span class="at">x =</span> PA, <span class="at">y =</span> Pop, <span class="at">fill =</span> AgeGroup)) <span class="sc">+</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">width =</span> <span class="fl">0.95</span>) <span class="sc">+</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Elderly Dependency Ratio line (deep purple)</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(</span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_agegroup,</span>
+<span id="cb30-26"><a href="#cb30-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> PA, <span class="at">y =</span> ElderlyRatio <span class="sc">*</span> max_pop <span class="sc">/</span> <span class="dv">2</span>, <span class="at">group =</span> <span class="dv">1</span>),</span>
+<span id="cb30-27"><a href="#cb30-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"#9932CC"</span>, <span class="at">size =</span> <span class="fl">1.2</span></span>
+<span id="cb30-28"><a href="#cb30-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb30-29"><a href="#cb30-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-30"><a href="#cb30-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Youth Dependency Ratio line (deep orange)</span></span>
+<span id="cb30-31"><a href="#cb30-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(</span>
+<span id="cb30-32"><a href="#cb30-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> df_agegroup,</span>
+<span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> PA, <span class="at">y =</span> YouthRatio <span class="sc">*</span> max_pop <span class="sc">/</span> <span class="dv">2</span>, <span class="at">group =</span> <span class="dv">1</span>),</span>
+<span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"#E67E22"</span>, <span class="at">size =</span> <span class="fl">1.2</span></span>
+<span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Median Elderly Dependency Ratio (black line)</span></span>
+<span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
+<span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">yintercept =</span> median_edr <span class="sc">*</span> max_pop <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb30-40"><a href="#cb30-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>, <span class="at">size =</span> <span class="fl">0.5</span></span>
+<span id="cb30-41"><a href="#cb30-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb30-42"><a href="#cb30-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-43"><a href="#cb30-43" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Median Youth Dependency Ratio (black line)</span></span>
+<span id="cb30-44"><a href="#cb30-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(</span>
+<span id="cb30-45"><a href="#cb30-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">yintercept =</span> median_ydr <span class="sc">*</span> max_pop <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb30-46"><a href="#cb30-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>, <span class="at">size =</span> <span class="fl">0.5</span></span>
+<span id="cb30-47"><a href="#cb30-47" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb30-48"><a href="#cb30-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-49"><a href="#cb30-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> custom_colors) <span class="sc">+</span></span>
+<span id="cb30-50"><a href="#cb30-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb30-51"><a href="#cb30-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Population Count"</span>,</span>
+<span id="cb30-52"><a href="#cb30-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">sec.axis =</span> <span class="fu">sec_axis</span>(<span class="sc">~</span> . <span class="sc">*</span> <span class="dv">2</span> <span class="sc">/</span> max_pop, <span class="at">name =</span> <span class="st">"Dependency Ratio"</span>),</span>
+<span id="cb30-53"><a href="#cb30-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">scale_cut =</span> <span class="fu">cut_short_scale</span>())</span>
+<span id="cb30-54"><a href="#cb30-54" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb30-55"><a href="#cb30-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb30-56"><a href="#cb30-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Population by Planning Area with Youth &amp; Elderly Dependency Ratios"</span>,</span>
+<span id="cb30-57"><a href="#cb30-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Planning Area"</span>,</span>
+<span id="cb30-58"><a href="#cb30-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Age Group"</span></span>
+<span id="cb30-59"><a href="#cb30-59" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb30-60"><a href="#cb30-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb30-61"><a href="#cb30-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb30-62"><a href="#cb30-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb30-63"><a href="#cb30-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span></span>
+<span id="cb30-64"><a href="#cb30-64" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="population-by-planning-area-with-youth-elderly-dependency-ratios" class="level3">
+<h3 class="anchored" data-anchor-id="population-by-planning-area-with-youth-elderly-dependency-ratios">Population by Planning Area with Youth &amp; Elderly Dependency Ratios</h3>
+<p>The visualises the age structure and demographic burden across Singapore’s planning areas. It features:</p>
+<p><strong>Stacked bar segments</strong> showing population counts by age group:</p>
+<ul>
+<li><p><strong>Yellow</strong> for <em>Youth</em> (aged below 15),</p></li>
+<li><p><strong>Gray</strong> for <em>Working-age</em> (15–64), and</p></li>
+<li><p><strong>Purple</strong> for <em>Elderly</em> (65+).</p></li>
+</ul>
+<p><strong>Two overlaid lines</strong> represent dependency ratios:</p>
+<ul>
+<li><p>A <strong>purple line</strong> shows the <strong>Elderly Dependency Ratio</strong> (EDR = Elderly / Working-age),</p></li>
+<li><p>An <strong>orange line</strong> represents the <strong>Youth Dependency Ratio</strong> (YDR = Youth / Working-age).</p></li>
+</ul>
+<p><strong>Two black horizontal lines</strong> indicate the <strong>national median values</strong> for both EDR and YDR, serving as benchmarks.</p>
+<p>Planning areas are ordered by total population, from left (most populous) to right (least).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Take-Home_Ex01_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Insight from Population by Planning Area with Youth &amp; Elderly Dependency Ratios
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>1. Population Distribution Is Highly Uneven</strong></p>
+<ul>
+<li><p>The chart reveals a long-tail distribution: a small number of planning areas (e.g., Tampines, Bedok, Sengkang) account for a disproportionately large share of Singapore’s residents.</p></li>
+<li><p>In contrast, many planning areas on the right — such as Southern Islands, Museum, or Western Water Catchment — have negligible populations and minimal demographic relevance.</p></li>
+<li><p>Implication: Policies addressing population aging or youth development should focus primarily on top-tier planning areas where interventions impact the most people.</p></li>
+</ul>
+<p><strong>2. Elderly Dependency Outpaces Youth Dependency</strong></p>
+<ul>
+<li><p>In most areas, the purple EDR line lies above the orange YDR line, signaling greater aging pressure than child-related burdens.</p></li>
+<li><p>Mature estates such as Bukit Merah, Queenstown, and Toa Payoh exhibit above-median elderly ratios, pointing to aging-in-place dynamics.</p></li>
+</ul>
+<p><strong>3. Dependency Burden Must Be Interpreted Alongside Population Scale</strong></p>
+<ul>
+<li>A high dependency ratio in a low-population area (e.g., Seletar) is less critical than a moderate ratio in a highly populated town (e.g., Tampines or Jurong West).</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

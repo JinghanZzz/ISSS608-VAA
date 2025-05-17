@@ -35,7 +35,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ✅ 顶部导航栏 */
+/* ✅ 顶部导航栏样式 */
 .navbar {
   background-color: #5C4033; /* 咖啡色背景 */
   border-bottom: 1px solid #D8CFC7;
@@ -49,24 +49,15 @@ a:hover {
 .navbar .nav-link:hover,
 .navbar .navbar-brand:hover,
 .navbar .dropdown-toggle:hover {
-  color:  #5C4030 !important; /* Hover: 杏仁色 */
+  color: #FFDAB9 !important; /* Hover 变杏仁色 */
 }
 .navbar .nav-link.active {
   border-bottom: 2px solid #FDF6EC;
 }
 
-/* ✅ 下拉菜单中的文字改为深棕色 */
-.navbar-dark .dropdown-menu .dropdown-item {
-  color: #5C4033 !important; /* 深棕色 */
-}
-.navbar-dark .dropdown-menu .dropdown-item:hover {
-  background-color: #f5f1ec;
-  color: #3E2C23 !important; /* hover 时更深 */
-}
-
-/* ✅ 标题区块（例如 Take-Home Exercise 01...） */
+/* ✅ 标题区块（如 Take-Home Exercise 01...） */
 .quarto-title-block {
-  background-color: #f0ebe5;
+  background-color: #f0ebe5;  /* 稍深的米色 */
   color: #2c3e50;
   padding: 2rem;
   border-bottom: 1px solid #ddd0c0;
