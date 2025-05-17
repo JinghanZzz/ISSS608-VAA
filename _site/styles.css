@@ -1,141 +1,35 @@
-/* 载入字体 */
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-
-/* 全局样式 */
-body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #fdfaf6;  /* 浅米色正文背景 */
-  color: #333333;
-  margin: 0;
-  padding: 0;
-}
-
-/* 宽屏正文区域 */
-.main-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem;
-  margin-right: 300px; /* 留出目录栏空间 */
-}
-
-/* 所有标题（正文） */
-h1, h2, h3, h4, h5, h6 {
-  color: #2c3e50;
-  font-weight: 700;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-}
-
-/* 链接样式 */
-a {
-  color: #d35400;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-
-/* ✅ 顶部导航栏样式 */
+/* 整个 navbar 背景设置为咖啡色 */
 .navbar {
-  background-color: #5C4033; /* 咖啡色背景 */
-  border-bottom: 1px solid #D8CFC7;
-}
-.navbar .nav-link,
-.navbar .navbar-brand,
-.navbar .dropdown-toggle,
-.navbar .nav-item a {
-  color: #FDF6EC !important; /* 浅米色文字 */
-}
-.navbar .nav-link:hover,
-.navbar .navbar-brand:hover,
-.navbar .dropdown-toggle:hover {
-  color: #FFDAB9 !important; /* Hover 变杏仁色 */
-}
-.navbar .nav-link.active {
-  border-bottom: 2px solid #FDF6EC;
+  background-color: #5C4033;  /* 深咖啡色 */
 }
 
-/* ✅ 标题区块（如 Take-Home Exercise 01...） */
-.quarto-title-block {
-  background-color: #f0ebe5;  /* 稍深的米色 */
-  color: #2c3e50;
-  padding: 2rem;
-  border-bottom: 1px solid #ddd0c0;
-}
-.quarto-title-block .title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-.quarto-title-authors,
-.quarto-title-meta {
-  font-size: 0.95rem;
-  color: #5c5248;
+/* navbar 中的文字颜色也设为浅米色 */
+.navbar .navbar-nav .nav-link,
+.navbar-brand {
+  color: #EBDDC8 !important; /* 浅米色 */
 }
 
-/* 右侧目录栏 */
-.sidebar.sidebar-right {
-  width: 260px;
-  padding: 1rem;
-  background-color: #f8f5f0;
-  border: 1px solid #e0dcd5;
-  border-radius: 8px;
-  position: fixed;
-  top: 100px;
-  right: 1rem;
-  overflow-y: auto;
-  max-height: 80vh;
+/* 鼠标悬停或点击 navbar 链接时维持浅米色 */
+.navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-nav .nav-link:focus {
+  color: #FFF8E7 !important; /* 更亮一点的米色 */
 }
 
-/* 表格样式 */
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-th, td {
-  text-align: left;
-  padding: 8px;
-}
-th {
-  background-color: #f0ebe5;
-  color: #2c3e50;
-}
-tr:nth-child(even) {
-  background-color: #f9f6f1;
+/* 下拉菜单背景：默认浅米色，文字为深咖啡 */
+.navbar .dropdown-menu {
+  background-color: #F5F5DC; /* 浅米色背景 */
+  color: #5C4033;            /* 深咖啡文字 */
+  border: none;
 }
 
-/* 代码块样式 */
-pre {
-  background-color: #f4f1ed;
-  padding: 1rem;
-  border-radius: 8px;
-  overflow-x: auto;
+/* 下拉菜单项默认颜色 */
+.navbar .dropdown-menu a {
+  color: #5C4033 !important;
+  background-color: #F5F5DC !important;
 }
 
-/* 图片居中 */
-img {
-  display: block;
-  margin: 2rem auto;
-  max-width: 100%;
-}
-
-/* 隐藏顶部代码按钮 */
-.quarto-navigation-tools .quarto-navigation-tool.code-tools {
-  display: none !important;
-}
-
-/* ✅ 响应式移动端优化 */
-@media screen and (max-width: 991px) {
-  .main-container {
-    margin: 0 auto;
-    padding: 1.2rem;
-  }
-
-  .sidebar.sidebar-right {
-    display: none;
-  }
-
-  body {
-    font-size: 95%;
-  }
+/* 下拉菜单 hover 效果：中浅色背景 + 咖啡文字 */
+.navbar .dropdown-menu a:hover {
+  background-color: #D2B48C !important; /* 中浅棕色背景 */
+  color: #5C4033 !important;            /* 咖啡文字不变 */
 }
