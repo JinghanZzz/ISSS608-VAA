@@ -73,7 +73,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-f29aaeecf1a46d890de4f9c541966cf8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-d5c296a9e60ed6c9f30b3dc68ebc3f1a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -152,7 +152,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -194,18 +194,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04a.html">
  <span class="dropdown-text">Hands-on Exercise 4</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04b.html">
- <span class="dropdown-text">Hands-on Exercise 4</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04c.html">
- <span class="dropdown-text">Hands-on Exercise 4</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04d.html">
- <span class="dropdown-text">Hands-on Exercise 4</span></a>
-  </li>  
+        <li class="dropdown-header">Hands-on Exercise 4</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -213,7 +202,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">In-class Exercise</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercise">    
-        <li class="dropdown-header">empty for now</li>
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-Home_Ex02.html">
+ <span class="dropdown-text">In-class Exercise 5</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -228,6 +220,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-Home_Ex1b.html">
  <span class="dropdown-text">Take-home Exercise 1b</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-Home_Ex02.html">
+ <span class="dropdown-text">Take-home Exercise 2</span></a>
   </li>  
     </ul>
   </li>
@@ -252,26 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul class="collapse">
-  <li><a href="#programming-interactive-data-visualisation-with-r" id="toc-programming-interactive-data-visualisation-with-r" class="nav-link active" data-scroll-target="#programming-interactive-data-visualisation-with-r"><strong>3&nbsp; Programming Interactive Data Visualisation with R</strong></a>
-  <ul class="collapse">
-  <li><a href="#learning-outcome" id="toc-learning-outcome" class="nav-link" data-scroll-target="#learning-outcome"><strong>3.1 Learning Outcome</strong></a></li>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started"><strong>3.2 Getting Started</strong></a></li>
-  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data"><strong>3.3 Importing Data</strong></a></li>
-  <li><a href="#interactive-data-visualisation---ggiraph-methods" id="toc-interactive-data-visualisation---ggiraph-methods" class="nav-link" data-scroll-target="#interactive-data-visualisation---ggiraph-methods"><strong>3.4 Interactive Data Visualisation - ggiraph methods</strong></a></li>
-  <li><a href="#interactivity---tooltip-information-display" id="toc-interactivity---tooltip-information-display" class="nav-link" data-scroll-target="#interactivity---tooltip-information-display"><strong>3.5 Interactivity -– Tooltip Information Display</strong></a></li>
-  <li><a href="#interactivity---tooltip-style" id="toc-interactivity---tooltip-style" class="nav-link" data-scroll-target="#interactivity---tooltip-style"><strong>3.6 Interactivity -– tooltip style</strong></a></li>
-  <li><a href="#interactive-data-visualisation---plotly-methods" id="toc-interactive-data-visualisation---plotly-methods" class="nav-link" data-scroll-target="#interactive-data-visualisation---plotly-methods"><strong>3.7 Interactive Data Visualisation - plotly methods!</strong></a></li>
-  <li><a href="#interactive-data-visualisation---crosstalk-methods" id="toc-interactive-data-visualisation---crosstalk-methods" class="nav-link" data-scroll-target="#interactive-data-visualisation---crosstalk-methods"><strong>3.8 Interactive Data Visualisation - crosstalk methods!</strong></a></li>
-  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference"><strong>3.9 Reference</strong></a></li>
-  </ul></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
