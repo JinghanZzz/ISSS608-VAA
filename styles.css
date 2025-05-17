@@ -52,7 +52,7 @@ a:hover {
   color: #FFDAB9 !important;  /* hover 显示杏仁色 */
 }
 .navbar .nav-link.active {
-  border-bottom: 2px solid #FDF6EC;
+  border-bottom: 2px solid #5C4033;
 }
 
 /* ✅ Dropdown 菜单项的文字颜色调整为深棕色 */
@@ -64,10 +64,7 @@ a:hover {
   color: #5C4033 !important;       /* 深棕色文字 */
   font-weight: 500;
 }
-.navbar-dark .dropdown-menu .dropdown-item:hover {
-  background-color: #f1e9e1;
-  color: #3E2C23 !important;       /* hover 深棕 */
-}
+
 
 /* ✅ 页面标题区域 */
 .quarto-title-block {
