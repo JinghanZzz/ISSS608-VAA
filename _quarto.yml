@@ -1,6 +1,3 @@
-project:
-  type: website
-
 website:
   title: "ISSS608-VAA"
   navbar:
@@ -26,29 +23,18 @@ website:
 
       - text: "In-class Exercise"
         menu:
-          - text: "empty for now"
+          - text: "In-class Exercise 5"
+            href: "Take-home_Ex/Take-home_Ex02/Take-Home_Ex02.html" 
+            
       - text: "Take-home Exercise"
         menu:
           - text: "Take-home Exercise 1a"
             href: "Take-home_Ex/Take-home_Ex01/Take-Home_Ex01.html"
           - text: "Take-home Exercise 1b"
             href: "Take-home_Ex/Take-home_Ex01/Take-Home_Ex1b.html"
+          - text: "Take-home Exercise 2"
+            href: "Take-home_Ex/Take-home_Ex02/Take-Home_Ex02.html"            
     right:
       - href: index.qmd
         text: Home
       - about.qmd
-
-
-    
-format:
-  html:
-    theme: cosmo
-    css: styles.css
-    toc: true
-    toc-depth: 2
-    toc-location: right   # ✅目录移到右侧
-    number-sections: false
-    code-tools: false
-
-
-editor: visual
