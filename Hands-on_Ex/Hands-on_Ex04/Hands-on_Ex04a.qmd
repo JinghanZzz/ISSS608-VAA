@@ -1,3 +1,15 @@
+---
+title: "Hands-on Exercise 04a"
+author: "Zhang Jinghan"
+date-modified: "last-modified"
+format: html
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true #防止重复render
+---
+
 \
 
 ::: panel-tabset
@@ -9,3 +21,5 @@
 
 `{r} #| eval: false}`
 :::
+
+111

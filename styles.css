@@ -1,22 +1,24 @@
+/* 载入字体 */
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+/* 全局样式 */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #fdfaf6;
+  background-color: #fdfaf6;  /* 浅米色正文背景 */
   color: #333333;
   margin: 0;
   padding: 0;
 }
 
-/* 宽屏模式下正文布局 */
+/* 宽屏正文区域 */
 .main-container {
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem;
-  margin-right: 300px; /* 预留给右侧TOC空间 */
+  margin-right: 300px; /* 留出目录栏空间 */
 }
 
-/* 标题样式 */
+/* 所有标题（正文） */
 h1, h2, h3, h4, h5, h6 {
   color: #2c3e50;
   font-weight: 700;
@@ -24,7 +26,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
 }
 
-/* 链接颜色 */
+/* 链接样式 */
 a {
   color: #d35400;
   text-decoration: none;
@@ -33,7 +35,54 @@ a:hover {
   text-decoration: underline;
 }
 
-/* 目录栏设置（右侧浮动） */
+/* ✅ 顶部导航栏 */
+.navbar {
+  background-color: #5C4033; /* 咖啡色背景 */
+  border-bottom: 1px solid #D8CFC7;
+}
+.navbar .nav-link,
+.navbar .navbar-brand,
+.navbar .dropdown-toggle,
+.navbar .nav-item a {
+  color: #FDF6EC !important; /* 浅米色文字 */
+}
+.navbar .nav-link:hover,
+.navbar .navbar-brand:hover,
+.navbar .dropdown-toggle:hover {
+  color: #FFDAB9 !important; /* Hover: 杏仁色 */
+}
+.navbar .nav-link.active {
+  border-bottom: 2px solid #FDF6EC;
+}
+
+/* ✅ 下拉菜单中的文字改为深棕色 */
+.navbar-dark .dropdown-menu .dropdown-item {
+  color: #5C4033 !important; /* 深棕色 */
+}
+.navbar-dark .dropdown-menu .dropdown-item:hover {
+  background-color: #f5f1ec;
+  color: #3E2C23 !important; /* hover 时更深 */
+}
+
+/* ✅ 标题区块（例如 Take-Home Exercise 01...） */
+.quarto-title-block {
+  background-color: #f0ebe5;
+  color: #2c3e50;
+  padding: 2rem;
+  border-bottom: 1px solid #ddd0c0;
+}
+.quarto-title-block .title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.quarto-title-authors,
+.quarto-title-meta {
+  font-size: 0.95rem;
+  color: #5c5248;
+}
+
+/* 右侧目录栏 */
 .sidebar.sidebar-right {
   width: 260px;
   padding: 1rem;
@@ -47,7 +96,7 @@ a:hover {
   max-height: 80vh;
 }
 
-/* 表格与代码区美化 */
+/* 表格样式 */
 table {
   border-collapse: collapse;
   width: 100%;
@@ -63,12 +112,16 @@ th {
 tr:nth-child(even) {
   background-color: #f9f6f1;
 }
+
+/* 代码块样式 */
 pre {
   background-color: #f4f1ed;
   padding: 1rem;
   border-radius: 8px;
   overflow-x: auto;
 }
+
+/* 图片居中 */
 img {
   display: block;
   margin: 2rem auto;
@@ -80,7 +133,7 @@ img {
   display: none !important;
 }
 
-/* ✅ 响应式：移动设备自适应 */
+/* ✅ 响应式移动端优化 */
 @media screen and (max-width: 991px) {
   .main-container {
     margin: 0 auto;
@@ -88,7 +141,7 @@ img {
   }
 
   .sidebar.sidebar-right {
-    display: none;  /* 目录栏隐藏 */
+    display: none;
   }
 
   body {
