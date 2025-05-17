@@ -49,7 +49,7 @@ a:hover {
 .navbar .nav-link:hover,
 .navbar .navbar-brand:hover,
 .navbar .dropdown-toggle:hover {
-  color: #FFDAB9 !important; /* Hover: 杏仁色 */
+  color:  #5C4030 !important; /* Hover: 杏仁色 */
 }
 .navbar .nav-link.active {
   border-bottom: 2px solid #FDF6EC;
