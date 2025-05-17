@@ -1,6 +1,13 @@
 ---
 title: "Hands-on Exercise 01"
 author: "Zhang Jinghan"
+date-modified: "last-modified"
+format: html
+execute:
+  eval: true
+  echo: true
+  warning: false
+  freeze: true #防止重复render
 ---
 
 # **1  A Layered Grammar of Graphics: ggplot2 methods**
