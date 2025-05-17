@@ -1,3 +1,6 @@
+project: 
+  type: website
+
 website:
   title: "ISSS608-VAA"
   navbar:
@@ -15,11 +18,6 @@ website:
           - text: "Hands-on Exercise 4"
             href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04a.html"
           - text: "Hands-on Exercise 4"
-            href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04b.html"  
-          - text: "Hands-on Exercise 4"
-            href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04c.html"  
-          - text: "Hands-on Exercise 4"
-            href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04d.html"              
 
       - text: "In-class Exercise"
         menu:
@@ -38,3 +36,10 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
+
+format: 
+  html:
+    theme: flatly
+    css: styles.css
+  
+    
