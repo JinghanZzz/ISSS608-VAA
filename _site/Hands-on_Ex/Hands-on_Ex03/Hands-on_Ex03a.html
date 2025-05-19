@@ -152,7 +152,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -194,7 +194,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04a.html">
  <span class="dropdown-text">Hands-on Exercise 4</span></a>
   </li>  
-        <li class="dropdown-header">Hands-on Exercise 4</li>
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html">
+ <span class="dropdown-text">Hands-on Exercise 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html">
+ <span class="dropdown-text">Hands-on Exercise 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html">
+ <span class="dropdown-text">Hands-on Exercise 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html">
+ <span class="dropdown-text">Hands-on Exercise 8</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html">
+ <span class="dropdown-text">Hands-on Exercise 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html">
+ <span class="dropdown-text">Hands-on Exercise 10</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -248,7 +271,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#programming-interactive-data-visualisation-with-r" id="toc-programming-interactive-data-visualisation-with-r" class="nav-link active" data-scroll-target="#programming-interactive-data-visualisation-with-r"><strong>3&nbsp; Programming Interactive Data Visualisation with R</strong></a>
+  <ul class="collapse">
+  <li><a href="#learning-outcome" id="toc-learning-outcome" class="nav-link" data-scroll-target="#learning-outcome"><strong>3.1 Learning Outcome</strong></a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started"><strong>3.2 Getting Started</strong></a></li>
+  <li><a href="#importing-data" id="toc-importing-data" class="nav-link" data-scroll-target="#importing-data"><strong>3.3 Importing Data</strong></a></li>
+  <li><a href="#interactive-data-visualisation---ggiraph-methods" id="toc-interactive-data-visualisation---ggiraph-methods" class="nav-link" data-scroll-target="#interactive-data-visualisation---ggiraph-methods"><strong>3.4 Interactive Data Visualisation - ggiraph methods</strong></a>
+  <ul class="collapse">
+  <li><a href="#tooltip-effect-with-tooltip-aesthetic" id="toc-tooltip-effect-with-tooltip-aesthetic" class="nav-link" data-scroll-target="#tooltip-effect-with-tooltip-aesthetic"><strong>3.4.1 Tooltip effect with <em>tooltip</em> aesthetic</strong></a></li>
+  </ul></li>
+  <li><a href="#interactivity---tooltip-information-display" id="toc-interactivity---tooltip-information-display" class="nav-link" data-scroll-target="#interactivity---tooltip-information-display"><strong>3.5 Interactivity -– Tooltip Information Display</strong></a>
+  <ul class="collapse">
+  <li><a href="#tooltip-information" id="toc-tooltip-information" class="nav-link" data-scroll-target="#tooltip-information">3.5.1 Tooltip Information</a></li>
+  <li><a href="#multiple-information-on-tooltip" id="toc-multiple-information-on-tooltip" class="nav-link" data-scroll-target="#multiple-information-on-tooltip"><strong>3.5.2 Multiple information on tooltip</strong></a></li>
+  </ul></li>
+  <li><a href="#interactivity---tooltip-style" id="toc-interactivity---tooltip-style" class="nav-link" data-scroll-target="#interactivity---tooltip-style"><strong>3.6 Interactivity -– tooltip style</strong></a>
+  <ul class="collapse">
+  <li><a href="#displaying-statistics-on-tooltip" id="toc-displaying-statistics-on-tooltip" class="nav-link" data-scroll-target="#displaying-statistics-on-tooltip"><strong>3.6.2 Displaying statistics on tooltip</strong></a></li>
+  <li><a href="#hover-effect-with-data_id-aesthetic" id="toc-hover-effect-with-data_id-aesthetic" class="nav-link" data-scroll-target="#hover-effect-with-data_id-aesthetic"><strong>3.6.3 Hover effect with <em>data_id</em> aesthetic</strong></a></li>
+  <li><a href="#styling-hover-effect" id="toc-styling-hover-effect" class="nav-link" data-scroll-target="#styling-hover-effect"><strong>3.6.4 Styling hover effect</strong></a></li>
+  <li><a href="#combining-tooltip-and-hover-effect" id="toc-combining-tooltip-and-hover-effect" class="nav-link" data-scroll-target="#combining-tooltip-and-hover-effect"><strong>3.6.5 Combining tooltip and hover effect</strong></a></li>
+  <li><a href="#click-effect-with-onclick" id="toc-click-effect-with-onclick" class="nav-link" data-scroll-target="#click-effect-with-onclick"><strong>3.6.6 Click effect with onclick</strong></a></li>
+  <li><a href="#coordinated-multiple-views-with-ggiraph" id="toc-coordinated-multiple-views-with-ggiraph" class="nav-link" data-scroll-target="#coordinated-multiple-views-with-ggiraph"><strong>3.6.7 Coordinated Multiple Views with ggiraph</strong></a></li>
+  </ul></li>
+  <li><a href="#interactive-data-visualisation---plotly-methods" id="toc-interactive-data-visualisation---plotly-methods" class="nav-link" data-scroll-target="#interactive-data-visualisation---plotly-methods"><strong>3.7 Interactive Data Visualisation - plotly methods!</strong></a>
+  <ul class="collapse">
+  <li><a href="#creating-an-interactive-scatter-plot-plot_ly-method" id="toc-creating-an-interactive-scatter-plot-plot_ly-method" class="nav-link" data-scroll-target="#creating-an-interactive-scatter-plot-plot_ly-method"><strong>3.7.1 Creating an interactive scatter plot: plot_ly() method</strong></a></li>
+  <li><a href="#working-with-visual-variable-plot_ly-method" id="toc-working-with-visual-variable-plot_ly-method" class="nav-link" data-scroll-target="#working-with-visual-variable-plot_ly-method"><strong>3.7.2 Working with visual variable: plot_ly() method</strong></a></li>
+  <li><a href="#creating-an-interactive-scatter-plot-ggplotly-method" id="toc-creating-an-interactive-scatter-plot-ggplotly-method" class="nav-link" data-scroll-target="#creating-an-interactive-scatter-plot-ggplotly-method"><strong>3.7.3 Creating an interactive scatter plot: ggplotly() method</strong></a></li>
+  <li><a href="#coordinated-multiple-views-with-plotly" id="toc-coordinated-multiple-views-with-plotly" class="nav-link" data-scroll-target="#coordinated-multiple-views-with-plotly"><strong>3.7.4 Coordinated Multiple Views with plotly</strong></a></li>
+  </ul></li>
+  <li><a href="#interactive-data-visualisation---crosstalk-methods" id="toc-interactive-data-visualisation---crosstalk-methods" class="nav-link" data-scroll-target="#interactive-data-visualisation---crosstalk-methods"><strong>3.8 Interactive Data Visualisation - crosstalk methods!</strong></a>
+  <ul class="collapse">
+  <li><a href="#interactive-data-table-dt-package" id="toc-interactive-data-table-dt-package" class="nav-link" data-scroll-target="#interactive-data-table-dt-package"><strong>3.8.1 Interactive Data Table: DT package</strong></a></li>
+  <li><a href="#linked-brushing-crosstalk-method" id="toc-linked-brushing-crosstalk-method" class="nav-link" data-scroll-target="#linked-brushing-crosstalk-method"><strong>3.8.2 Linked brushing: crosstalk method</strong></a></li>
+  </ul></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference"><strong>3.9 Reference</strong></a>
+  <ul class="collapse">
+  <li><a href="#ggiraph" id="toc-ggiraph" class="nav-link" data-scroll-target="#ggiraph"><strong>3.9.1 ggiraph</strong></a></li>
+  <li><a href="#plotly-for-r" id="toc-plotly-for-r" class="nav-link" data-scroll-target="#plotly-for-r"><strong>3.9.2 plotly for R</strong></a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
