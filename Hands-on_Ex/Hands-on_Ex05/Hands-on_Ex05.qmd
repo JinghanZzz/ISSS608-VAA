@@ -180,9 +180,8 @@ Two functions of **tidygraph** package can be used to create network objects, th
 
 -   *activate()* verb from **tidygraph** serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to **tbl_graph** object are applied to the active tibble.
 
-```{=html}
 <!-- -->
-```
+
 -   In the above the *.N()* function is used to gain access to the node data while manipulating the edge data. Similarly *.E()* will give you the edge data and *.G()* will give you the **tbl_graph** object itself.
 
 ### **27.4.3 Using `tbl_graph()` to build tidygraph data model.**
