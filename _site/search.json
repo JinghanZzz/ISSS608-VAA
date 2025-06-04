@@ -565,5 +565,47 @@
     "title": "Hands-on Exercise 06",
     "section": "",
     "text": "In this section you will learn how to plot a slopegraph by using R.\nBefore getting start, make sure that CGPfunctions has been installed and loaded onto R environment. Then, refer to Using newggslopegraph to learn more about the function. Lastly, read more about and its arguments by referring to this link.newggslopegraph()\n\npacman::p_load(CGPfunctions)\n\n\n\nImport the rice data set into R environment by using the code chunk below.\n\nrice &lt;- read_csv(\"data/rice.csv\")\n\n\n\n\nNext, code chunk below will be used to plot a basic slopegraph as shown below.\n\nrice %&gt;% \n  mutate(Year = factor(Year)) %&gt;%\n  filter(Year %in% c(1961, 1980)) %&gt;%\n  newggslopegraph(Year, Yield, Country,\n                Title = \"Rice Yield of Top 11 Asian Counties\",\n                SubTitle = \"1961-1980\",\n                Caption = \"Prepared by: Dr. Kam Tin Seong\")\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nTakeaway from the code above:\nFor effective data visualisation design, is used convert the value type of Year field from numeric to factor.factor()"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/th2 redo.html",
+    "href": "Take-home_Ex/Take-home_Ex02/th2 redo.html",
+    "title": "Take Home Exercise 02",
+    "section": "",
+    "text": "For data cleaning, the following R packages will be used. They are tidyverse, jsonlite, tidygraph and ggraph.\n\npacman::p_load(tidyverse, jsonlite,   #tidyverse全家桶里面把各种gg都包括了\n               SmartEDA, tidygraph, \n               ggraph)\n\n\n\n\nFor the purpose of this exercise, MC1_graph.json file will be used. Before getting started, you should have the data set in the data sub-folder.\nIn the code chunk below, fromJSON() of jsonlite package is used to import MC1_graph.json file into R and save the output object\n\nkg &lt;- fromJSON(\"data/MC1_graph.json\")\n\n\n\n\n\nstr(kg, max.level = 1)  #只看最高level的data structure\n\nList of 5\n $ directed  : logi TRUE\n $ multigraph: logi TRUE\n $ graph     :List of 2\n $ nodes     :'data.frame': 17412 obs. of  10 variables:\n $ links     :'data.frame': 37857 obs. of  4 variables:\n\n\n\n\n\nNext, as_tibble() of tibble package package is used to extract the nodes and links tibble data frames from kg object into two separate tibble data frames called nodes_tbl and edges_tbl respectively.\n\n#Extract nodes and edges from kg\nnodes_tbl &lt;- as_tibble(kg$nodes)\nedges_tbl &lt;- as_tibble(kg$links)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/th2 redo.html#import-r-packages",
+    "href": "Take-home_Ex/Take-home_Ex02/th2 redo.html#import-r-packages",
+    "title": "Take Home Exercise 02",
+    "section": "",
+    "text": "For data cleaning, the following R packages will be used. They are tidyverse, jsonlite, tidygraph and ggraph.\n\npacman::p_load(tidyverse, jsonlite,   #tidyverse全家桶里面把各种gg都包括了\n               SmartEDA, tidygraph, \n               ggraph)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/th2 redo.html#import-data",
+    "href": "Take-home_Ex/Take-home_Ex02/th2 redo.html#import-data",
+    "title": "Take Home Exercise 02",
+    "section": "",
+    "text": "For the purpose of this exercise, MC1_graph.json file will be used. Before getting started, you should have the data set in the data sub-folder.\nIn the code chunk below, fromJSON() of jsonlite package is used to import MC1_graph.json file into R and save the output object\n\nkg &lt;- fromJSON(\"data/MC1_graph.json\")"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/th2 redo.html#inspect-structure",
+    "href": "Take-home_Ex/Take-home_Ex02/th2 redo.html#inspect-structure",
+    "title": "Take Home Exercise 02",
+    "section": "",
+    "text": "str(kg, max.level = 1)  #只看最高level的data structure\n\nList of 5\n $ directed  : logi TRUE\n $ multigraph: logi TRUE\n $ graph     :List of 2\n $ nodes     :'data.frame': 17412 obs. of  10 variables:\n $ links     :'data.frame': 37857 obs. of  4 variables:"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/th2 redo.html#extracting-the-edges-and-nodes-tables",
+    "href": "Take-home_Ex/Take-home_Ex02/th2 redo.html#extracting-the-edges-and-nodes-tables",
+    "title": "Take Home Exercise 02",
+    "section": "",
+    "text": "Next, as_tibble() of tibble package package is used to extract the nodes and links tibble data frames from kg object into two separate tibble data frames called nodes_tbl and edges_tbl respectively.\n\n#Extract nodes and edges from kg\nnodes_tbl &lt;- as_tibble(kg$nodes)\nedges_tbl &lt;- as_tibble(kg$links)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex02/th2 redo.html#creating-knowledge-graph",
+    "href": "Take-home_Ex/Take-home_Ex02/th2 redo.html#creating-knowledge-graph",
+    "title": "Take Home Exercise 02",
+    "section": "Creating knowledge graph",
+    "text": "Creating knowledge graph\n\nMapping from node id to row index\nBefore we can go ahead to build the tidygraph object, it is important for us to ensures each id from the node list is mapped to the correct row number. This requirement can be achive by using the code chunk below.\n\nid_map &lt;- tibble(id=nodes_tbl$id,\n                 index = seq_len(\n                   nrow(nodes_tbl)\n                 ))\n#处理后就没有id=0了\n\n\n\nMap source and target IDs to row indices\nNext, we will map the source and the target IDs to row indices by using the code chunk below.\n\nedges_tbl &lt;- edges_tbl %&gt;%\n  left_join(id_map, by = c(\"source\" = \"id\")) %&gt;%\n  rename(from = index) %&gt;%\n  left_join(id_map, by = c(\"target\" = \"id\")) %&gt;%\n  rename(to = index)\n\n\n\nFilter out any unmatched (invalid) edges\nLastly, the code chunk below will be used to exclude the unmatch edges.\n\nedges_tbl &lt;- edges_tbl%&gt;%\n  filter(!is.na(from), !is.na(to))\n\n\n\nCreating tidygraph\nLastly, tbl_graph() is used to create tidygraph’s graph object by using the code chunk below.\n\ngraph &lt;- tbl_graph(nodes = nodes_tbl, \n                   edges = edges_tbl, \n                   directed = kg$directed)\n\nYou might want to confirm the output object is indeed in tidygraph format by using the code chunk below.\n\nclass(graph)\n\n[1] \"tbl_graph\" \"igraph\"   \n\n\n\n\nVisualising the knowledge graph\nIn this section, we will use ggraph’s functions to visualise and analyse the graph object.Visualising the knowledge graph.\nSeveral of the ggraph layouts involve randomisation. In order to ensure reproducibility, it is necessary to set the seed value before plotting by using the code chunk below.\n\nset.seed(1234)\n\nVisualising the whole graph\n\nggraph(graph, layout = \"fr\") +      #先plotlink再plot node 这样重叠顺序才对\n  geom_edge_link(alpha = 0.3, \n                 colour = \"gray\") +\n  geom_node_point(aes(color = `Node Type`), \n                  size = 1) +\n  geom_node_text(aes(label = name), \n                 repel = TRUE, \n                 size = 2.5) +\n  theme_void()\n\n\nStep 1: Filter edges to only “MemberOf”\n\ngraph_memberof&lt;-graph %&gt;%\n  activate(edges)%&gt;%\n  filter(`Edge Type` == \"MemberOf\")\n\nStep 2: Extract only connected nodes (i.e., use in these edges)\n\nused_node_indices &lt;- graph_memberof %&gt;%\n  activate(edges) %&gt;%\n  as_tibble()%&gt;%\n  select(from, to)%&gt;%\n  unlist()%&gt;%\n  unique()\n\nStep 3\n\ngraph_memberof &lt;- graph_memberof %&gt;%\n  activate(nodes) %&gt;%\n  mutate(row_id = row_number()) %&gt;%\n  filter(row_id %in% used_node_indices) %&gt;%\n  select(-row_id)  # optional cleanup\n\nPlot the subplot1\n\nggraph(graph_memberof, layout = \"fr\") +\n  geom_edge_link(alpha = 0.5, \n                 colour = \"gray\") +\n  geom_node_point(aes(color = `Node Type`), \n                  size = 1) +\n  geom_node_text(aes(label = name), \n                 repel = TRUE, \n                 size = 2.5) +\n  theme_void()\n\n\nwrite_csv(nodes_tbl, \"nodes_tbl.csv\")\nwrite_csv(edges_tbl, \"edges_tbl.csv\")"
   }
 ]
