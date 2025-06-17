@@ -2,7 +2,7 @@
 title: "Take Home Exercise 02:"
 author: "Zhang Jinghan"
 date-modified: "last-modified"
-format: docx
+format: html
 execute:
   eval: true
   echo: true
