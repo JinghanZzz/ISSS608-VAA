@@ -1,0 +1,16 @@
+---
+title: "Investment Vis"
+author: "Zhang Jinghan"
+format: dashboard
+theme: 
+  - darkly
+execute:
+  echo: false  #是否显示结果
+editor: visual
+---
+
+# 
+
+```{r}
+pacman:: p_load(tidiverse, tidyquant, )
+```
