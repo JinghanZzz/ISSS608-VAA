@@ -37,7 +37,8 @@ kg <- fromJSON("data/MC1_graph.json")
 ## **Inspect Structure**
 
 ```{r}
-str(kg, max.level = 1)  #只看最高level的data structure
+
+str(kg, max.level = 1)  #show highest level的data structure
 ```
 
 ## Convert year-like character to integer
@@ -55,7 +56,7 @@ kg$nodes <- kg$nodes %>%
 
 ## **Extracting the edges and nodes tables**
 
-Next, `as_tibble()` of **tibble** package package is used to extract the nodes and links tibble data frames from *kg* object into two separate tibble data frames called *nodes_tbl* and *edges_tbl* respectively.
+Next, `as_tibble()` of **tibble** package package is used to extract the nodes and links tibble data frames from *kg* object into two separate tibble data frames called *nodes_tbl* and *edges_tbl* respectively.
 
 ```{r}
 #Extract nodes and edges from kg
@@ -137,7 +138,7 @@ edges_tbl <- edges_tbl%>%
 
 ### **Creating tidygraph**
 
-Lastly, `tbl_graph()` is used to create tidygraph’s graph object by using the code chunk below.
+Lastly, `tbl_graph()` is used to create tidygraph's graph object by using the code chunk below.
 
 ```{r}
 graph <- tbl_graph(nodes = nodes_tbl, 
@@ -153,7 +154,7 @@ class(graph)
 
 ### **Visualising the knowledge graph**
 
-In this section, we will use ggraph’s functions to visualise and analyse the graph object.Visualising the knowledge graph.
+In this section, we will use ggraph's functions to visualise and analyse the graph object.Visualising the knowledge graph.
 
 Several of the ggraph layouts involve randomisation. In order to ensure reproducibility, it is necessary to set the seed value before plotting by using the code chunk below.
 
@@ -178,7 +179,7 @@ ggraph(graph, layout = "fr") +
 
 ------------------------------------------------------------------------
 
-# REDO Q2: The Spread of Oceanus Folk
+# Q2: The Spread of Oceanus Folk
 
 ## EDA
 
@@ -211,7 +212,7 @@ p1 + p2
 ```
 
 |   | Edge Type | From Node Type (A) | To Node Type (B) | Flow of Influence |
-|---------------|---------------|---------------|---------------|---------------|
+|----|----|----|----|----|
 | Produce | **DistributedBy** | song/album | record label | / |
 | Produce | **RecordedBy** | song/album | record label | / |
 | Contribute/Create | **ComposerOf** | person | song/album | A to B |
@@ -235,6 +236,7 @@ There are 26 genres in total with dream pop having most songs and albums. Oceanu
 #| code-fold: true
 #| warning: false
 #| message: false
+#| freeze: true
 # Count the number of Songs and Albums in each genre
 genre_summary <- nodes_tbl %>%
   filter(`Node Type` %in% c("Song", "Album")) %>%
@@ -379,17 +381,34 @@ ggplot(songs_by_year, aes(x = release_date, y = count, color = is_oceanus)) +
 
 ## 2a. Was this influence intermittent or did it have a gradual rise?
 
+::: callout-note
+### Assumption
+
+We assume that the **influence of Oceanus Folk** increases as the **number of works released** in the genre grows. A higher release volume suggests broader artist adoption and greater genre presence in the music network.
+:::
+
 ### **2a.1 Number of Oceanus Folk Release**
 
-assumption：在这里我们假设influence of oceanus folk会随着该风格作品数量的增加而增加
+This visualization combines a yearly line chart and a 5-year binned heatmap to analyze the release trend of Oceanus Folk works.
 
-line表示每一年oceanus folkrelease的总量。算法是node =song/album where genre=oceanus folk
+#### **Step 1: Prepare yearly release data**
 
-下面的heatmap表示5-year-bin之后的发行量颜色越深表示发布越多
+The dataset is filtered to include only `Song` and `Album` nodes where the genre is "Oceanus Folk". The number of releases per year is counted and reshaped using `pivot_wider` to separate counts for Songs and Albums. A new column `total` is created to represent the yearly sum of both types.
 
-鼠标hover到line可以看当年的oceanus folk total release， album和song 的分别release
+#### **Step 2: Generate 5-year bins for heatmap**
 
-hover到heatmap，可以看这5年的release总量，还能看相较于上个period的change，即多发布多少work/少多少
+Years are grouped into 5-year bins using `floor(release_date / 5) * 5`.\
+For each bin, the total number of releases, as well as breakdowns for albums and songs, are aggregated. An additional column `change` calculates the absolute difference in total releases from the previous bin. A hover text is prepared for display in the interactive plot.
+
+#### **Step 3: Construct the static ggplot**
+
+The plot contains two layers: - A **heatmap** (`geom_tile`) aligned below the x-axis, using fill color to represent the total number of releases in each 5-year bin. - A **line chart** (`geom_line`) showing the trend of total yearly releases, with **points** (`geom_point`) that reveal detailed hover information for each year, including totals and breakdowns.
+
+#### **Step 4: Convert to interactive plot**
+
+The static plot is transformed into an interactive visualization using `ggplotly()`. The tooltip is set to use the custom `text` field to display detailed year or period-specific data when users hover over the plot.
+
+This combined approach allows users to explore both fine-grained yearly trends and broader multi-year patterns in the adoption of Oceanus Folk genre.
 
 ```{r}
 #| code-fold: true
@@ -449,7 +468,7 @@ p <- ggplot() +
              color = "#2f4b7c", size = 2) +
   scale_fill_gradient(low = "#a8dadc", high = "#2f4b7c") +
   labs(
-    title = "Oceanus Folk Releases by Year with 5-Year Heatmap",
+    title = "Oceanus Folk Releases by Year with 5-Year Interval Heatmap",
     x = "Release Year",
     y = "Total Count",
     fill = "5-Year Total"
@@ -468,30 +487,55 @@ The line chart above plots the number of release in Oceanus folk genre by year w
 
 We assume that higher volume of productions in a genre reflects the influence and spread of genre because it suggests greater adoption by artists, indicating that the genre resonates with creators and is being actively used as a mode of expression.
 
-Oceanus Folk’s rise to prominence appears to be a two-phase process: it began with a gradual buildup from the 1990s to the late 2000s, followed by a sudden surge in releases from 2010 to 2014. After that there was a second surge around 2020 to 2024 and peaked at the same period.
+Oceanus Folk's rise to prominence appears to be a two-phase process: it began with a gradual buildup from the 1990s to the late 2000s, followed by a sudden surge in releases from 2010 to 2014. After that there was a second surge around 2020 to 2024 and peaked at the same period.
 
 **This pattern suggests that the genre first accumulated a foundational base of creators and early adopters, then experienced a rapid acceleration in influence and production, likely driven by cultural resonance, landmark works, or wider adoption across communities.**
 :::
 
 ## 2b. What genres and top artists have been most influenced by Oceanus Folk
 
-### 2a.2 Reach of People Count and Works
+::: callout-note
+### Assumption
 
-assumption：连接的音乐人越多，作品越多，
+We assume that **the more connections a genre or artist has to Oceanus Folk–influenced works**, the greater the **interaction** and **influence**.
 
-We go through the edge and nodes and evaluate influence of a genre according to the number of people it reach.
+A higher number of such links suggests that Oceanus Folk has been actively referenced, adopted, or reinterpreted by other creators.
 
-Currently, genre is an attribute of song/album nodes in the dataset, we need to transform it to a virtual node.
+### Definition of Influence between Genres via Song/Album
+
+Influence in this context is defined based on specific edge types that indicate a stylistic or content-based relationship.\
+The following edge types are used to capture different modes of influence:
+
+-   `InStyleOf`: The influenced work adopts the style of an Oceanus Folk work
+-   `CoverOf`: A direct cover or reinterpretation
+-   `InterpolatesFrom`: Elements of the original are restructured or embedded
+-   `DirectlySamples`: A portion of the Oceanus Folk work is directly used
+-   `LyricalReferenceTo`: The lyrics reference Oceanus Folk content
+
+These relationships are traced from Oceanus Folk songs and albums to other works, forming the basis for calculating influence metrics on genres and artists.
+:::
 
 ### 2b.1 Transform Genre to Virtual Node
 
-------------------------------------------------------------------------
+Currently, genre is an attribute of song/album nodes in the dataset, we need to transform it to a virtual node.
+
+To construct the influence network of the Oceanus Folk genre, we begin by enriching the original edge list (`edges_tbl`) with metadata about node types and genres. Songs and albums classified under the Oceanus Folk genre are identified as source nodes, and influence-type edges (e.g., *InStyleOf*, *CoverOf*, *InterpolatesFrom*) originating from these works are selected.
+
+Next, we define a central "Oceanus Folk" genre node to act as a hub, and extract metadata about works influenced by Oceanus Folk. These works are represented as nodes, and directed edges from the genre node to the works are constructed. Additional genre nodes are created for the influenced works, and a secondary set of edges links these works to their respective genres.
+
+Node sizes are scaled based on the number of incoming connections (in-degree), representing how many times a work or genre has been referenced. The Oceanus Folk genre node is manually assigned a larger size to visually emphasize its centrality.
+
+Finally, we assign visual properties to the edges. Each edge is colored according to its influence type, and tooltips displaying the edge type are included using the `title` field. To maintain a clean visual layout, the default `label` field is removed to avoid persistent on-edge text. This ensures that edge types are only revealed upon hovering, thereby reducing visual clutter.
 
 ```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+#| freeze: true
 library(dplyr)
 library(scales)
 
-# Step 1: enrich edge metadata
+# Step 1: Enrich edge metadata with source and target node types and genres
 edge_graphdata <- edges_tbl %>%
   left_join(nodes_tbl %>% select(id, genre_from = genre),
             by = c("from" = "id")) %>%
@@ -500,25 +544,25 @@ edge_graphdata <- edges_tbl %>%
   left_join(nodes_tbl %>% select(id, type_to = `Node Type`),
             by = c("to" = "id"))
 
-# Step 2: get all Oceanus Folk publications
+# Step 2: Identify all Oceanus Folk songs and albums
 of_publications <- nodes_tbl %>%
   filter(`Node Type` %in% c("Song", "Album"), genre == "Oceanus Folk") %>%
   pull(id)
 
-# Step 3: select outgoing influence edges from Oceanus Folk works
+# Step 3: Select influence-type edges originating from Oceanus Folk works
 of_outgoing_edges <- edge_graphdata %>%
   filter(from %in% of_publications,
          `Edge Type` %in% c("InStyleOf", "CoverOf", "InterpolatesFrom",
                             "DirectlySamples", "LyricalReferenceTo"))
 
-# Step 4: get metadata of target nodes (influenced works)
+# Step 4: Collect metadata of target works influenced by Oceanus Folk
 target_metadata <- of_outgoing_edges %>%
   left_join(nodes_tbl %>%
               select(id, name_target = name, genre_target = genre, type_target = `Node Type`),
             by = c("to" = "id")) %>%
   distinct(to, name_target, genre_target, type_target)
 
-# Step 5: define the genre node for Oceanus Folk
+# Step 5: Create a virtual node representing the Oceanus Folk genre
 node_of <- tibble(
   id    = "Oceanus Folk",
   label = "Oceanus Folk",
@@ -526,8 +570,9 @@ node_of <- tibble(
   title = "Genre node for Oceanus Folk<br>Aggregated influence hub"
 )
 
-# Step 6: define influenced works as nodes
+# Step 6: Create nodes for the influenced works (only Song and Album types)
 target_graphdata <- target_metadata %>%
+  filter(type_target %in% c("Song", "Album")) %>%
   transmute(
     id    = as.character(to),
     label = name_target,
@@ -535,15 +580,17 @@ target_graphdata <- target_metadata %>%
     title = paste0("Genre: ", genre_target)
   )
 
-# Step 7: edges from Oceanus Folk → influenced works
+# Step 7: Create influence edges from Oceanus Folk to its influenced works
 edge_of_to_target <- of_outgoing_edges %>%
+  left_join(nodes_tbl %>% select(id, `Node Type`), by = c("to" = "id")) %>%
+  filter(`Node Type` %in% c("Song", "Album")) %>%
   transmute(
     from  = "Oceanus Folk",
     to    = as.character(to),
     title = paste0("Edge Type: ", `Edge Type`)
   )
 
-# Step 8A: define genre nodes for all non-Oceanus Folk influenced works
+# Step 8A: Create nodes for all other genre types (excluding Oceanus Folk)
 other_genres <- target_metadata %>%
   filter(!is.na(genre_target), genre_target != "Oceanus Folk") %>%
   distinct(genre_target) %>%
@@ -554,27 +601,29 @@ other_genres <- target_metadata %>%
     title = paste0("Genre node: ", genre_target)
   )
 
-# Step 8B: edges from influenced works → their genre
+# Step 8B: Create edges from works to their corresponding genres
 edge_work_to_genre <- target_metadata %>%
-  filter(!is.na(genre_target), genre_target != "Oceanus Folk") %>%
+  filter(!is.na(genre_target), 
+         genre_target != "Oceanus Folk",
+         type_target %in% c("Song", "Album")) %>%
   transmute(
     from = as.character(to),
     to   = genre_target,
     title = "Belongs to genre"
   )
 
-# Step 9: assemble full node and edge tables
+# Step 9: Assemble the full node and edge tables
 node_graphdata <- bind_rows(node_of, target_graphdata, other_genres) %>%
   distinct(id, .keep_all = TRUE)
 
 edge_graphdata_final <- bind_rows(edge_of_to_target, edge_work_to_genre) %>%
   distinct(from, to, .keep_all = TRUE)
 
-# Step 10: compute in-degree (how many times a node is targeted)
+# Step 10: Compute in-degree (number of incoming edges per node)
 target_meta <- edge_graphdata_final %>%
   count(to, name = "n_incoming")
 
-# Step 11: assign node size
+# Step 11: Assign node sizes based on in-degree
 node_graphdata <- node_graphdata %>%
   left_join(target_meta, by = c("id" = "to")) %>%
   mutate(size = case_when(
@@ -583,48 +632,107 @@ node_graphdata <- node_graphdata %>%
   ) %>%
   replace_na(list(size = 20))
 
+# Step 12: Finalize edge visualization with type, color, and hover tooltip
+edges_vis <- edge_graphdata_final %>%
+  mutate(
+    label = case_when(
+      str_detect(title, regex("InStyleOf", ignore_case = TRUE)) ~ "InStyleOf",
+      str_detect(title, regex("CoverOf", ignore_case = TRUE)) ~ "CoverOf",
+      str_detect(title, regex("InterpolatesFrom", ignore_case = TRUE)) ~ "InterpolatesFrom",
+      str_detect(title, regex("DirectlySamples", ignore_case = TRUE)) ~ "DirectlySamples",
+      str_detect(title, regex("LyricalReferenceTo", ignore_case = TRUE)) ~ "LyricalReferenceTo",
+      str_detect(title, regex("Belongs to genre", ignore_case = TRUE)) ~ "BelongsToGenre",
+      TRUE ~ "Other"
+    ),
+    color = case_when(
+      label == "InStyleOf" ~ "blue",
+      label == "CoverOf" ~ "red",
+      label == "InterpolatesFrom" ~ "purple",
+      label == "DirectlySamples" ~ "orange",
+      label == "LyricalReferenceTo" ~ "green",
+      label == "BelongsToGenre" ~ "gray",
+      TRUE ~ "black"
+    ),
+    width = 2,
+    title = paste0("Edge Type: ", label)
+  )
+
+
 ```
 
-**Plotting Oceanus Folk Centered Network**
+### **2b.2 Plotting Oceanus Folk Influence Network**
+
+We plot a network with *Oceanus Folk* at the center, connected to the works it has influenced and the genres those works belong to — forming an **Oceanus Folk → Influenced Work → Genre** structure. This structure helps us identify which genres have been most influenced by Oceanus Folk.
+
+1.  **Standardize node types**\
+    Nodes originally labeled as "Song" or "Album" are reclassified under a unified group "Work" for consistent styling and group-based coloring.
+
+2.  **Extract and format genre information**
+
+    -   For work nodes, the genre is extracted from the node title and stored in a separate `display_genre` field.
+    -   For genre nodes, the label "Genre node" is assigned.
+
+3.  **Customize tooltips**\
+    HTML-formatted tooltips (`title`) are defined for each node. These tooltips include the node’s name, type, and genre (if available), and appear when the user hovers over the node.
+
+4.  **Define node colors**\
+    Colors are assigned based on node type:
+
+    -   Genre nodes → `skyblue`
+    -   Work nodes (songs/albums) → `lightgreen`
+    -   Others → `gray`
+
+5.  **Control label visibility**\
+    Only genre nodes are assigned visible labels (with a larger font size). Work nodes remain unlabeled to reduce clutter.
+
+6.  **Render the interactive network**\
+    Using `visNetwork()`, the node and edge data is rendered with the following key features:
+
+    -   **Highlighting and interactivity:** Users can hover over or select nodes to explore their connections.
+    -   **Directed arrows:** All edges are directional (`arrows = "to"`), indicating influence or genre linkage.
+    -   **Physics engine:** The *forceAtlas2Based* physics solver is used for layout, with gravitational tuning and stabilization for a clean layout.
+    -   **Legend configuration:**
+        -   Node group legend is auto-generated using `visGroups()`.
+        -   Edge type legend is manually added via `addEdges` in `visLegend()`, matching edge colors to their semantic meanings (e.g., "CoverOf" = red).
 
 ```{r}
+#| code-fold: true
+#| warning: false
+#| message: false
+#| freeze: true
+
 nodes_vis <- node_graphdata %>%
   mutate(
+    # Standardize node types
     group = case_when(
       group %in% c("Song", "Album") ~ "Work",
       TRUE ~ group
     ),
-    display_name = label,
+    # Extract genre information
     display_genre = case_when(
       group == "Work" ~ str_extract(title, "(?<=Genre: ).*"),
       group == "Genre" ~ "Genre node",
       TRUE ~ NA_character_
     ),
-    label = display_name,
+    # Set HTML-formatted tooltips
     title = paste0(
-      "<b>", display_name, "</b><br>",
+      "<b>", label, "</b><br>",
       "Type: ", group, "<br>",
       ifelse(!is.na(display_genre), paste0("Genre: ", display_genre, "<br>"), "")
     ),
+    # Assign node colors
     color = case_when(
       group == "Genre"  ~ "skyblue",
       group == "Work"   ~ "lightgreen",
-      group == "Person" ~ "yellow",
       TRUE              ~ "gray"
     ),
-    font_size = ifelse(group == "Genre", 20, 0)  # ✅ 只让 Genre 显示 label
-  )
+    # Only genre nodes display labels
+    font_size = ifelse(group == "Genre", 20, 0)
+  ) %>%
+  mutate(font = map(font_size, ~ list(size = .x)))
 
-nodes_vis <- nodes_vis %>%
-  mutate(font = purrr::map(font_size, ~ list(size = .x)))
-
-
-edges_vis <- edge_graphdata_final
-
-
-library(purrr)
-
-visNetwork(nodes = nodes_vis, edges = edges_vis, width = "100%", height = "700px") %>%
+visNetwork(nodes = nodes_vis, edges = edges_vis, 
+           width = "100%", height = "700px") %>%
   visNodes(
     borderWidth = 2,
     borderWidthSelected = 4,
@@ -641,107 +749,412 @@ visNetwork(nodes = nodes_vis, edges = edges_vis, width = "100%", height = "700px
   ) %>%
   visInteraction(zoomView = TRUE) %>%
   visLayout(randomSeed = 1234) %>%
-  visGroups(groupname = "Genre",  color = "skyblue") %>%
-  visGroups(groupname = "Work",   color = "lightgreen") %>%
-  visGroups(groupname = "Person", color = "yellow") %>%
-  visLegend(useGroups = TRUE, position = "right", main = "Node Type") %>%
+  visGroups(groupname = "Genre", color = "skyblue") %>%
+  visGroups(groupname = "Work", color = "lightgreen") %>%
+  visLegend(
+    useGroups = TRUE,
+    position = "right",
+    main = "Legend",
+    addEdges = data.frame(
+      label = c("InStyleOf", "CoverOf", "InterpolatesFrom", 
+                "DirectlySamples", "LyricalReferenceTo", "BelongsToGenre"),
+      color = c("blue", "red", "purple", "orange", "green", "gray")
+    )
+  ) %>%
   visPhysics(
     solver = "forceAtlas2Based",
     forceAtlas2Based = list(gravitationalConstant = -50),
     stabilization = list(enabled = TRUE, iterations = 100)
   )
 
+
+```
+
+**Network Structure**
+
+This visualization clearly communicates the influence pathway of *Oceanus Folk* as a genre. The network is structured in a two-hop flow: \[**Genre → Work → Genre**\]
+
+-   The central blue node labeled **Oceanus Folk** serves as the origin point of influence.
+
+-   It connects outward to multiple **light green nodes**, which represent the **musical works** influenced by Oceanus Folk.
+
+-   Each of these works is further linked to a **sky blue node**, indicating the **genre** the work belongs to.
+
+Each colored arrow denotes a specific type of influence, such as *InStyleOf*, *CoverOf*, or *DirectlySamples*, making it possible to distinguish how the influence was transmitted.
+
+This structure helps us identify which genres have been most influenced by Oceanus Folk through intermediary works — notably genres like **Indie Folk**, **Synthwave**, and **Dream Pop**, which appear as large blue nodes due to their high number of incoming connections.
+
+::: callout-note
+#### Insight
+
+**Indie Folk** is the genre which receives most influence in degree from Oceanus Folk reflected as the biggest node except Oceanus Folk in the network, Indicating high centrality and cumulative influence.
+
+**Deam Pop** ranks second, absorbed notable influence from Oceanus Folk through works *In Style Of* or *Interpolates From* Oceanus Folk.
+
+**Synthwave** comes third but shows a strong connection via Directly Samples relationships.
+:::
+
+### 2b.3 Top Influenced Genres: Absolute and Relative Analysis
+
+This part aims to offers insights into which musical styles most absorbed Oceanus Folk's influence, both in absolute and proportional terms.
+
+We first counted how many influenced works were ultimately labeled under each genre using `BelongsToGenre` edges. This provides an **absolute measure** of genre influence. Next, to account for the varying total output sizes of different genres, we joined this with the **total number of works per genre**, allowing us to compute a **relative influence ratio**: the share of influenced works out of total genre works.
+
+```{r}
+top_genre_rank <- edges_vis %>%
+  filter(label == "BelongsToGenre") %>%
+  count(to, name = "influenced_work_count") %>%
+  arrange(desc(influenced_work_count)) %>%
+  left_join(nodes_vis %>% select(id, label), by = c("to" = "id")) %>%
+  rename(genre = label)
+
+#top_genre_rank %>% slice_head(n = 5)
+
+genre_total_count <- nodes_tbl %>%
+  filter(`Node Type` %in% c("Song", "Album")) %>%
+  count(genre, name = "total_works")
+
+genre_summary <- top_genre_rank %>%
+  left_join(genre_total_count, by = c("genre" = "genre")) %>%
+  mutate(ratio = influenced_work_count / total_works)
+
+
+genre_summary %>%
+  arrange(desc(ratio)) %>%
+  slice_head(n = 5)
+```
+
+Two complementary visualizations are presented:
+
+```{r}
+library(ggplot2)
+library(patchwork)
+
+# Plot 1: Absolute Influenced Works
+p1 <- ggplot(genre_summary, aes(x = reorder(genre, influenced_work_count), 
+                                y = influenced_work_count)) +
+  geom_col(fill = "skyblue") +
+  coord_flip() +
+  labs(
+    title = "Top Influenced Genres by Oceanus Folk (Absolute Count)",
+    x = "Genre",
+    y = "Number of Influenced Works"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(plot.title = element_text(lineheight = 1.1, hjust = 0.5))
+
+# Plot 2: Relative Influenced Share (Lollipop)
+p2 <- ggplot(genre_summary, aes(x = ratio, y = reorder(genre, ratio))) +
+  geom_segment(aes(x = 0, xend = ratio, yend = genre), color = "gray") +
+  geom_point(color = "steelblue", size = 5) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Top Influenced Genres by Oceanus Folk (Relative Share)",
+    x = "Influenced Share of Works",
+    y = "Genre"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(plot.title = element_text(lineheight = 1.1, hjust = 0.5))
+
+# Combine vertically
+p1 / p2
+
+```
+
+**Bar Chart (Top Panel):** Shows the absolute number of works in each genre influenced by Oceanus Folk.
+
+-   *Indie Folk* leads with 7 works, followed by *Dream Pop* (4), *Synthwave* (3), *Celtic Folk* (2), and *Acoustic Folk* (1). These counts reflect the **breadth of Oceanus Folk's influence** across stylistic boundaries.
+
+**Lollipop Plot (Bottom Panel):** Presents the relative influence — the proportion of each genre’s total works that were influenced.
+
+-   Though *Celtic Folk* has only 2 influenced works, it ranks high in **relative share** due to a small base of total works, highlighting a **concentrated influence**. This view helps distinguish niche genres with deep stylistic borrowings from those with broad but diffuse connections.
+
+Based on the number of works influenced by Oceanus Folk and subsequently categorized under different genres, **Indie Folk** ranks first with 7 influenced works, indicating a strong stylistic connection. **Dream Pop** follows with 4 works, showing notable indirect influence. **Synthwave** takes the third position with 3 works, some of which may reflect direct sampling relationships. **Celtic Folk** and **Acoustic Folk** complete the top five, with 2 and 1 influenced works respectively.
+
+Total number of works each genre have
+
+```{r}
+
+```
+
+```{r}
+
+
+```
+
+```         
+```
+
+```{r}
+library(ggplot2)
+library(scales)
+
+# Calculate scale factor
+max_count <- max(genre_summary$influenced_work_count)
+max_ratio <- max(genre_summary$ratio)
+scale_factor <- max_count / max_ratio
+
+# Add scaled ratio for plotting
+plot_data <- genre_summary %>%
+  mutate(scaled_ratio = ratio * scale_factor)
+
+ggplot(plot_data, aes(x = reorder(genre, influenced_work_count))) +
+  # Bar: absolute influenced count
+  geom_col(aes(y = influenced_work_count, fill = "Influenced Count"), width = 0.6) +
+
+  # Line + point: relative ratio (scaled)
+  geom_line(aes(y = scaled_ratio, color = "Influence Ratio", group = 1), size = 1.2) +
+  geom_point(aes(y = scaled_ratio, color = "Influence Ratio"), size = 3) +
+
+  # Axes
+  scale_y_continuous(
+    name = "Number of Influenced Works",
+    sec.axis = sec_axis(~ . / scale_factor,
+                        name = "Influenced Share",
+                        labels = percent_format(accuracy = 1))
+  ) +
+  labs(
+    title = "Oceanus Folk's Influence on Genres (Absolute vs. Relative)",
+    x = "Genre",
+    fill = "",
+    color = ""
+  ) +
+  scale_fill_manual(values = c("Influenced Count" = "skyblue")) +
+  scale_color_manual(values = c("Influence Ratio" = "steelblue")) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "top",
+    axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),  # genre竖着显示
+    axis.title.y.right = element_text(color = "steelblue"),
+    axis.text.y.right = element_text(color = "steelblue"),
+    axis.line.y.right = element_line(color = "steelblue"),
+    axis.ticks.y.right = element_line(color = "steelblue")
+  )
+
+```
+
+```{r}
+library(ggplot2)
+library(ggrepel)
+library(dplyr)
+
+# Step 1: 计算中位数或均匀分位数作为阈值
+x_median <- median(genre_summary$influenced_work_count)
+y_median <- median(genre_summary$ratio)
+
+# Step 2: 添加象限标签
+genre_quadrant <- genre_summary %>%
+  mutate(
+    quadrant = case_when(
+      influenced_work_count >= x_median & ratio >= y_median ~ "I: High-High",
+      influenced_work_count <  x_median & ratio >= y_median ~ "II: Low-High",
+      influenced_work_count <  x_median & ratio <  y_median ~ "III: Low-Low",
+      influenced_work_count >= x_median & ratio <  y_median ~ "IV: High-Low"
+    )
+  )
+
+# Step 3: 绘图
+ggplot(genre_quadrant, aes(x = influenced_work_count, y = ratio, color = quadrant)) +
+  geom_point(size = 4) +
+  geom_vline(xintercept = x_median, linetype = "dashed", color = "gray50") +
+  geom_hline(yintercept = y_median, linetype = "dashed", color = "gray50") +
+  geom_text_repel(aes(label = genre), size = 4) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    x = "Number of Influenced Works",
+    y = "Share of Works Influenced",
+    title = "Oceanus Folk's Influence by Genre",
+    subtitle = "Divided into Four Quadrants by Median Thresholds",
+    color = "Quadrant"
+  ) +
+  theme_minimal(base_size = 14)
+
 ```
 
 ------------------------------------------------------------------------
 
-Top Artists who are most influenced by Oceanus Folk
+## Top Artists who are most influenced by Oceanus Folk
 
 ```{r}
-library(dplyr)
-library(stringr)
+# Step 0: 筛选有contribute to notable works的top artist
+# 1. 找出所有notable works
+notable_works <- nodes_tbl %>%
+  filter(`Node Type` %in% c("Song", "Album"), notable == TRUE) %>%
+  pull(id)
 
-# ⚠️ 确保 node_graphdata$id 是 character
-node_graphdata <- node_graphdata %>%
-  mutate(id = as.character(id))
+# 2. 找出直接contribute的artist
+contrib_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
+direct_contributors <- edges_tbl %>%
+  filter(`Edge Type` %in% contrib_types, to %in% notable_works) %>%
+  pull(from)
 
-# Step A: 找出被 Oceanus Folk 影响的作品 ID
-influenced_work_ids <- target_metadata$to
+# 3. 可选：group成员（如果有group对notable work有贡献）
+group_ids <- nodes_tbl %>%
+  filter(`Node Type` == "Music Group") %>%
+  pull(id)
+group_contributors <- edges_tbl %>%
+  filter(`Edge Type` %in% contrib_types, from %in% group_ids, to %in% notable_works) %>%
+  pull(from)
+group_members <- edges_tbl %>%
+  filter(`Edge Type` == "MemberOf", to %in% group_contributors) %>%
+  pull(from)
 
-# Step B: 找出 performer 相关的边
-edge_work_to_person <- edges_tbl %>%
-  filter(from %in% influenced_work_ids,
-         `Edge Type` %in% c("PerformedBy", "CreatedBy", "MemberOf")) %>%
-  transmute(
-    from = as.character(from),
-    to   = as.character(to),
-    title = paste0("Performer link: ", `Edge Type`)
-  )
+# 4. 合并所有top artist id
+# 注意：有些id可能不是Person类型，后续分析时需与Person节点交集
+all_top_artist_ids <- unique(c(direct_contributors, group_members))
 
-# Step C: 构建 Person 节点
-person_nodes_from_edges <- nodes_tbl %>%
-  filter(`Node Type` == "Person", id %in% edge_work_to_person$to) %>%
-  transmute(
-    id = as.character(id),  # ✅ 关键转换
-    label = name,
-    group = "Person",
-    title = paste0("Performer: ", name)
-  ) %>%
-  distinct(id, .keep_all = TRUE)
-
-# Step D: 合并入原始节点和边表
-node_graphdata <- bind_rows(node_graphdata, person_nodes_from_edges) %>%
-  distinct(id, .keep_all = TRUE)
-
-edge_graphdata_final <- bind_rows(edge_graphdata_final, edge_work_to_person) %>%
-  distinct(from, to, .keep_all = TRUE)
-
-
+# 5. 只保留Person类型的top artist id
+person_ids <- nodes_tbl %>%
+  filter(`Node Type` == "Person") %>%
+  pull(id)
+top_artist_ids <- intersect(all_top_artist_ids, person_ids)
 ```
 
 ```{r}
+# 📦 Load libraries
+library(dplyr)
+library(purrr)
+library(stringr)
 library(visNetwork)
 library(scales)
-library(purrr)
 
-# Step 1: nodes_vis 加分组字体控制
+# 📌 Step 1: enrich edge metadata
+edge_graphdata <- edges_tbl %>%
+  left_join(nodes_tbl %>% select(id, genre_from = genre),
+            by = c("from" = "id")) %>%
+  left_join(nodes_tbl %>% select(id, type_from = `Node Type`),
+            by = c("from" = "id")) %>%
+  left_join(nodes_tbl %>% select(id, type_to = `Node Type`),
+            by = c("to" = "id"))
+
+# 📌 Step 2: get all Oceanus Folk publications (Song or Album)
+of_publications <- nodes_tbl %>%
+  filter(`Node Type` %in% c("Song", "Album"), genre == "Oceanus Folk") %>%
+  pull(id)
+
+# 📌 Step 3: get edges representing influence from OF works to others
+influence_edge_types <- c("InStyleOf", "CoverOf", "InterpolatesFrom",
+                          "DirectlySamples", "LyricalReferenceTo")
+
+of_outgoing_edges <- edge_graphdata %>%
+  filter(from %in% of_publications, `Edge Type` %in% influence_edge_types)
+
+# 📌 Step 4: get metadata for influenced works
+influenced_work_metadata <- of_outgoing_edges %>%
+  left_join(nodes_tbl %>%
+              select(id, name_work = name, type_work = `Node Type`),
+            by = c("to" = "id")) %>%
+  distinct(to, name_work, type_work)
+
+# 📌 Step 5: get people who are linked to这些works ← 🔁 REVERSED DIRECTION HERE!
+person_link_types <- c("PerformerOf", "ComposerOf", "ProducerOf", "LyricistOf")
+
+work_to_person_edges <- edge_graphdata %>%
+  filter(to %in% influenced_work_metadata$to,
+         `Edge Type` %in% person_link_types) %>%
+  left_join(nodes_tbl %>%
+              filter(`Node Type` == "Person") %>%
+              select(id, name_person = name),
+            by = c("from" = "id")) %>%
+  transmute(
+    from = as.character(to),        # from: song
+    to   = as.character(from),      # to: person
+    title = paste0("Role: ", `Edge Type`),
+    name_person
+  ) %>%
+  filter(!is.na(name_person), to %in% top_artist_ids) %>%  # 只保留top artist
+  distinct(from, to, title, name_person)
+
+# 📌 Step 6: define nodes
+node_of <- tibble(
+  id = "Oceanus Folk",
+  label = "Oceanus Folk",
+  group = "Genre",
+  title = "Genre node: Oceanus Folk"
+)
+
+node_work <- nodes_tbl %>%
+  filter(id %in% influenced_work_metadata$to) %>%
+  transmute(
+    id = as.character(id),
+    label = name,
+    group = `Node Type`,  # original type: Song or Album
+    title = paste0("Influenced Work: ", name)
+  )
+
+node_person <- work_to_person_edges %>%
+  distinct(to, name_person) %>%
+  transmute(
+    id = to,
+    label = name_person,
+    group = "Person",
+    title = paste0("Artist: ", name_person)
+  )
+
+# 📌 Step 7: define edges
+edge_of_to_work <- of_outgoing_edges %>%
+  transmute(
+    from = "Oceanus Folk",
+    to   = as.character(to),
+    title = paste0("Influence: ", `Edge Type`)
+  )
+
+edge_work_to_person <- work_to_person_edges %>%
+  select(from, to, title)
+
+
+
+  
+# 📌 Step 8: assemble full node table with only connected nodes
+
+# 合并所有节点候选：Oceanus Folk + 被影响的作品 + 参与的人
+node_graphdata_full <- bind_rows(node_of, node_work, node_person) %>%
+  distinct(id, .keep_all = TRUE)
+
+# 获取所有出现在边中的节点 ID（from 和 to 都算）
+used_node_ids <- unique(c(edge_of_to_work$from, edge_of_to_work$to,
+                          edge_work_to_person$from, edge_work_to_person$to))
+
+# 仅保留参与连接的节点
+node_graphdata <- node_graphdata_full %>%
+  filter(id %in% used_node_ids) %>%
+  distinct(id, .keep_all = TRUE)
+  
+
+
+# 📌 Step 9: compute in-degree (number of incoming edges)
+target_meta <- edge_graphdata_final %>%
+  count(to, name = "n_incoming")
+
+node_graphdata <- node_graphdata %>%
+  mutate(id = as.character(id)) %>%
+  left_join(target_meta, by = c("id" = "to")) %>%
+  mutate(size = case_when(
+    id == "Oceanus Folk" ~ 60,
+    TRUE ~ rescale(n_incoming, to = c(10, 50), na.rm = TRUE))
+  ))
+
+# 📌 Step 10: format for visNetwork
 nodes_vis <- node_graphdata %>%
   mutate(
     group = case_when(
       group %in% c("Song", "Album") ~ "Work",
       TRUE ~ group
     ),
-    display_name = label,
-    display_genre = case_when(
-      group == "Work" ~ str_extract(title, "(?<=Genre: ).*"),
-      group == "Genre" ~ "Genre node",
-      TRUE ~ NA_character_
-    ),
-    label = display_name,  # ✅ 保留 label 用于下拉菜单
-    title = paste0(
-      "<b>", display_name, "</b><br>",
-      "Type: ", group, "<br>",
-      ifelse(!is.na(display_genre), paste0("Genre: ", display_genre, "<br>"), "")
-    ),
+    font_size = ifelse(group == "Genre", 20, 15),
     color = case_when(
       group == "Genre"  ~ "skyblue",
       group == "Work"   ~ "lightgreen",
       group == "Person" ~ "yellow",
       TRUE              ~ "gray"
-    ),
-    font_size = ifelse(group == "Genre", 20, 0),
-    font = map(font_size, ~ list(size = .x))
-  )
+    )
+  ) %>%
+  mutate(font = map(font_size, ~ list(size = .x)))
 
-# Step 2: edges_vis 处理箭头
-edges_vis <- edge_graphdata_final %>%
-  mutate(
-    arrows = "to",
-    smooth = FALSE
-  )
+edges_vis <- edge_graphdata_final
 
-# Step 3: visNetwork 可视化
-visNetwork(nodes_vis, edges_vis, width = "100%", height = "700px") %>%
+# 📌 Step 11: interactive visualization
+visNetwork(nodes = nodes_vis, edges = edges_vis, width = "100%", height = "700px") %>%
   visNodes(
     borderWidth = 2,
     borderWidthSelected = 4,
@@ -754,25 +1167,18 @@ visNetwork(nodes_vis, edges_vis, width = "100%", height = "700px") %>%
   visEdges(arrows = "to", smooth = FALSE) %>%
   visOptions(
     highlightNearest = TRUE,
-    nodesIdSelection = list(
-      enabled = TRUE,
-      useLabels = TRUE
-    )
+    nodesIdSelection = list(enabled = TRUE, useLabels = TRUE)
   ) %>%
-  visInteraction(
-    zoomView = TRUE,
-    dragView = TRUE,
-    navigationButtons = TRUE
-  ) %>%
-  visLayout(randomSeed = 1234) %>%
+  visInteraction(zoomView = TRUE, dragNodes = TRUE) %>%
+  visLayout(randomSeed = 2025) %>%
   visGroups(groupname = "Genre",  color = "skyblue") %>%
   visGroups(groupname = "Work",   color = "lightgreen") %>%
   visGroups(groupname = "Person", color = "yellow") %>%
   visLegend(
-    useGroups = TRUE,
-    position = "right",
-    main = "Node Type"
-  ) %>%
+  useGroups = TRUE,
+  position = "right",
+  main = "Node Type & Size Meaning"
+)%>%
   visPhysics(
     solver = "forceAtlas2Based",
     forceAtlas2Based = list(gravitationalConstant = -50),
@@ -782,44 +1188,60 @@ visNetwork(nodes_vis, edges_vis, width = "100%", height = "700px") %>%
 ```
 
 ```{r}
-# Step 1: 获取 Oceanus Folk 影响到的作品 ID
-influenced_work_ids <- of_outgoing_edges$to
+library(dplyr)
+library(ggplot2)
+library(forcats)
 
-# Step 2: 找出 PerformerOf 边：Person → Work
-person_links <- edges_tbl %>%
-  filter(`Edge Type` == "PerformerOf", to %in% influenced_work_ids) %>%
-  transmute(person_id = as.character(from), work_id = as.character(to))
+library(ggplot2)
+library(dplyr)
+library(forcats)
 
-# Step 3: 统计每个 Person 被影响的作品数
-influence_count <- person_links %>%
-  count(person_id, name = "n_influenced_works") %>%
-  arrange(desc(n_influenced_works))
+# 1. 计算每个 person 的 in-degree
+person_indegree_tbl <- work_to_person_edges %>%
+  count(to, name = "in_degree") %>%
+  left_join(node_person, by = c("to" = "id")) %>%
+  select(id = to, name_person = label, in_degree)
 
-# Step 4: 加入人名
-top_influenced_persons <- influence_count %>%
-  left_join(
-    nodes_tbl %>%
-      filter(`Node Type` == "Person") %>%
-      transmute(person_id = as.character(id), name),
-    by = "person_id"
-  )
 
+# 2. 作图
+ggplot(person_indegree_tbl, aes(x = fct_reorder(name_person, in_degree), y = in_degree)) +
+  geom_col(fill = "#FFA500") +
+  coord_flip() +
+  labs(
+    title = "Oceanus Folk Influence by Person",
+    subtitle = "Number of Oceanus Folk-influenced works each artist participated in",
+    x = "Artist",
+    y = "Number of Influenced Works (In-Degree)"
+  ) +
+  theme_minimal(base_size = 13)
+
+
+```
+
+top10
+
+```{r}
+top10_tbl <- person_indegree_tbl %>%
+  arrange(desc(in_degree)) %>%
+  slice_head(n = 10)
 
 ```
 
 ```{r}
-library(ggplot2)
-
-library(ggplot2)
-
-top_influenced_persons %>%
-  slice_max(n_influenced_works, n = 10) %>%
-  ggplot(aes(x = reorder(name, n_influenced_works), y = n_influenced_works)) +
-  geom_col(fill = "steelblue") +
+ggplot(top10_tbl, 
+       aes(x = fct_reorder(name_person, in_degree, .desc = TRUE), y = in_degree)) +
+  geom_col(fill = "#FFA500") +
+  geom_text(aes(label = in_degree), hjust = -0.1, size = 4) +
   coord_flip() +
-  labs(title = "Top 10 Persons Influenced by Oceanus Folk",
-       x = "Person", y = "Number of Influenced Works") +
-  theme_minimal()
-
+  labs(
+    title = "Top 10 Most Influenced Artists by Oceanus Folk",
+    subtitle = "Ranked by number of Oceanus Folk-influenced works participated in",
+    x = "Artist",
+    y = "Number of Influenced Works (In-Degree)"
+  ) +
+  theme_minimal(base_size = 13) +
+  ylim(0, max(top10_tbl$in_degree) * 1.15)  # 给文本预留右边空间
 
 ```
+
+--
