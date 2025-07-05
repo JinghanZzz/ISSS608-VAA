@@ -34,6 +34,10 @@ website:
         menu:
           - text: "In-class Exercise 5"
             href: "Take-home_Ex/Take-home_Ex02/Take-Home_Ex02.html" 
+          - text: "In-class Exercise 7"
+            href: "https://jhzhang.shinyapps.io/In-class_Ex07/" 
+          - text: "In-class Exercise 10"
+            href: "In-class_Ex/In-class_Ex10/In-class_Ex10.qmd" 
             
       - text: "Take-home Exercise"
         menu:
@@ -42,7 +46,10 @@ website:
           - text: "Take-home Exercise 1b"
             href: "Take-home_Ex/Take-home_Ex01/Take-Home_Ex1b.html"
           - text: "Take-home Exercise 2"
-            href: "Take-home_Ex/Take-home_Ex02/Take-Home_Ex02.html"            
+            href: "Take-home_Ex/Take-home_Ex02/Take-Home_Ex02.html" 
+          - text: "Take-home Exercise 3"
+            href: "https://jhzhang.shinyapps.io/Take-home_Ex03/" 
+          
     right:
       - href: index.qmd
         text: Home
